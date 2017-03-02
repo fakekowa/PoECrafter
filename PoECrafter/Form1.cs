@@ -277,13 +277,13 @@ namespace WindowsFormsApplication3
                     await System.Threading.Tasks.Task.Delay(50);
                     Item = Clipboard.GetText();
                     GetItem();
-
+                    
                     if (RedWant.Value == 0)
                         RedDesired = RedSockets;
                     if (GreenWant.Value == 0)
-                        GreenDesired = RedSockets;
+                        GreenDesired = GreenSockets;
                     if (BlueWant.Value == 0)
-                        BlueDesired = RedSockets;
+                        BlueDesired = BlueSockets;
 
                     print(RedSockets, Color.Red);
                     print("          ", Color.Black);
