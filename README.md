@@ -4,4 +4,4 @@ PoECraft Helper helps with:
   - Coloring
   - Linking
   
-![alt tag](https://raw.githubusercontent.com/DetectiveSquirrel/PoECrafter/master/PoECrafter.PNG)
+![alt tag](https://raw.githubusercontent.com/DetectiveSquirrel/PoECrafter/master/PoECrafter2.PNG)
