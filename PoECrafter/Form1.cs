@@ -426,7 +426,7 @@ namespace WindowsFormsApplication3
             }
 
             // Standalone
-            objProcesses = Process.GetProcessesByName("pathofexile_x32");
+            objProcesses = Process.GetProcessesByName("pathofexile");
             if (objProcesses.Length > 0)
             {
                 IntPtr hWnd = IntPtr.Zero;
