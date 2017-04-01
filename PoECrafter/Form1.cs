@@ -12,10 +12,8 @@ using System.Diagnostics;
 
 namespace WindowsFormsApplication3
 {
-
     public partial class ProgressBar : Form
     {
-
         public ProgressBar()
         {
             InitializeComponent();
@@ -52,27 +50,12 @@ namespace WindowsFormsApplication3
         decimal WhiteSockets = 0;
 
         // Locations
+        int[] CraftMat = { 332, 584 };
+        int[] Fusing = { 141, 557 };
+        int[] Chromatic = { 210, 558 };
+        int[] Jeweler = { 73, 556 };
+        int[] Item2 = { 1384, 716 };
 
-        public class CraftingLocation
-        {
-            public static int[] CraftMat = { 0, 0 };
-            public static int[] Fusing = { 0, 0 };
-            public static int[] Chromatic = { 0, 0 };
-            public static int[] Jeweler = { 0, 0 };
-        }
-
-        public static void UpdateLocations()
-        {
-            // Locations
-            CraftingLocation.CraftMat[0] = Properties.Settings.Default.CraftItemX;
-            CraftingLocation.CraftMat[1] = Properties.Settings.Default.CraftItemY;
-            CraftingLocation.Fusing[0] = Properties.Settings.Default.FusingX;
-            CraftingLocation.Fusing[1] = Properties.Settings.Default.FusingY;
-            CraftingLocation.Chromatic[0] = Properties.Settings.Default.ChromaticX;
-            CraftingLocation.Chromatic[1] = Properties.Settings.Default.ChromaticY;
-            CraftingLocation.Jeweler[0] = Properties.Settings.Default.JewellerX;
-            CraftingLocation.Jeweler[1] = Properties.Settings.Default.JewellerY;
-        }
 
         public static class VirtualKeyboard
         {
@@ -175,16 +158,15 @@ namespace WindowsFormsApplication3
                 decimal Roll = 0;
                 var CraftStarted = false;
                 VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                 VirtualKeyboard.KeyUp(Keys.LShiftKey);
 
-                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                SetCursorPos(CraftMat[0], CraftMat[1]);
+                await System.Threading.Tasks.Task.Delay(250);
                 SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(50);
                 Item = Clipboard.GetText();
                 GetItem();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(50);
                 while (LinkCount < WantLinks.Value && Roll < FusingsToUse.Value)
                 {
 
@@ -192,20 +174,19 @@ namespace WindowsFormsApplication3
                     if (!CraftStarted)
                     {
                         VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.Fusing[0], CraftingLocation.Fusing[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        SetCursorPos(Fusing[0], Fusing[1]);
+                        await System.Threading.Tasks.Task.Delay(250);
                         RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        await System.Threading.Tasks.Task.Delay(50);
+                        SetCursorPos(CraftMat[0], CraftMat[1]);
+                        await System.Threading.Tasks.Task.Delay(250);
 
                     }
                     CraftStarted = true;
                     LeftClick();
-                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    await System.Threading.Tasks.Task.Delay(250);
                     SendKeys.Send("^(C)");
-                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    await System.Threading.Tasks.Task.Delay(50);
                     Item = Clipboard.GetText();
                     GetItem();
 
@@ -258,16 +239,15 @@ namespace WindowsFormsApplication3
 
                 FocusPoE();
                 VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                 VirtualKeyboard.KeyUp(Keys.LShiftKey);
 
-                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                SetCursorPos(CraftMat[0], CraftMat[1]);
+                await System.Threading.Tasks.Task.Delay(250);
                 SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(50);
                 Item = Clipboard.GetText();
                 GetItem();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(50);
 
                 if (RedWant.Value == 0)
                     RedDesired = RedSockets;
@@ -283,19 +263,18 @@ namespace WindowsFormsApplication3
                     if (!CraftStarted)
                     {
                         VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.Chromatic[0], CraftingLocation.Chromatic[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        SetCursorPos(Chromatic[0], Chromatic[1]);
+                        await System.Threading.Tasks.Task.Delay(250);
                         RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        await System.Threading.Tasks.Task.Delay(50);
+                        SetCursorPos(CraftMat[0], CraftMat[1]);
+                        await System.Threading.Tasks.Task.Delay(250);
                     }
                     CraftStarted = true;
                     LeftClick();
-                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    await System.Threading.Tasks.Task.Delay(250);
                     SendKeys.Send("^(C)");
-                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    await System.Threading.Tasks.Task.Delay(50);
                     Item = Clipboard.GetText();
                     GetItem();
                     
@@ -354,16 +333,15 @@ namespace WindowsFormsApplication3
                 var CraftStarted = false;
                 FocusPoE();
                 VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                 VirtualKeyboard.KeyUp(Keys.LShiftKey);
 
-                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                SetCursorPos(CraftMat[0], CraftMat[1]);
+                await System.Threading.Tasks.Task.Delay(250);
                 SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(50);
                 Item = Clipboard.GetText();
                 GetItem();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(50);
                 while (SocketCount < WantSockets.Value && Roll < JewelersToUse.Value)
                 {
 
@@ -371,20 +349,19 @@ namespace WindowsFormsApplication3
                     if (!CraftStarted)
                     {
                         VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.Jeweler[0], CraftingLocation.Jeweler[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        SetCursorPos(Jeweler[0], Jeweler[1]);
+                        await System.Threading.Tasks.Task.Delay(250);
                         RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        await System.Threading.Tasks.Task.Delay(50);
+                        SetCursorPos(CraftMat[0], CraftMat[1]);
+                        await System.Threading.Tasks.Task.Delay(250);
 
                     }
                     CraftStarted = true;
                     LeftClick();
-                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    await System.Threading.Tasks.Task.Delay(250);
                     SendKeys.Send("^(C)");
-                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    await System.Threading.Tasks.Task.Delay(50);
                     Item = Clipboard.GetText();
                     GetItem();
 
@@ -426,23 +403,46 @@ namespace WindowsFormsApplication3
         // Focus Path of Exile Window
         public static bool FocusPoE()
         {
-            foreach (Process p in Process.GetProcesses("."))
-            {
-                try
-                {
-                    if (p.MainWindowTitle.Length > 0)
-                    {
+            Process[] objProcesses;
 
-                        if (p.MainWindowTitle.Contains("Path of Exile"))
-                        {
-                            SetForegroundWindow(p.MainWindowHandle);
-                            return true;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                }
+            // Steam
+            objProcesses = Process.GetProcessesByName("PathOfExileSteam");
+            if (objProcesses.Length > 0)
+            {
+                IntPtr hWnd = IntPtr.Zero;
+                hWnd = objProcesses[0].MainWindowHandle;
+                ShowWindowAsync(new HandleRef(null, hWnd), SW_RESTORE);
+                SetForegroundWindow(objProcesses[0].MainWindowHandle);
+                return true;
+            }
+            objProcesses = Process.GetProcessesByName("PathOfExile_x64Steam");
+            if (objProcesses.Length > 0)
+            {
+                IntPtr hWnd = IntPtr.Zero;
+                hWnd = objProcesses[0].MainWindowHandle;
+                ShowWindowAsync(new HandleRef(null, hWnd), SW_RESTORE);
+                SetForegroundWindow(objProcesses[0].MainWindowHandle);
+                return true;
+            }
+
+            // Standalone
+            objProcesses = Process.GetProcessesByName("pathofexile");
+            if (objProcesses.Length > 0)
+            {
+                IntPtr hWnd = IntPtr.Zero;
+                hWnd = objProcesses[0].MainWindowHandle;
+                ShowWindowAsync(new HandleRef(null, hWnd), SW_RESTORE);
+                SetForegroundWindow(objProcesses[0].MainWindowHandle);
+                return true;
+            }
+            objProcesses = Process.GetProcessesByName("pathofexile_x64");
+            if (objProcesses.Length > 0)
+            {
+                IntPtr hWnd = IntPtr.Zero;
+                hWnd = objProcesses[0].MainWindowHandle;
+                ShowWindowAsync(new HandleRef(null, hWnd), SW_RESTORE);
+                SetForegroundWindow(objProcesses[0].MainWindowHandle);
+                return true;
             }
 
             return false;
@@ -473,50 +473,19 @@ namespace WindowsFormsApplication3
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.WindowLocation = this.Location;
-            Properties.Settings.Default.AddedDelay = trackBar1.Value;
             Properties.Settings.Default.Save();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Location = Properties.Settings.Default.WindowLocation;
-            this.TopMost = Properties.Settings.Default.AlwaysOnTop;
-            DelayNumber.Text = Properties.Settings.Default.AddedDelay.ToString();
-            trackBar1.Value = Properties.Settings.Default.AddedDelay;
-            alwaysOntopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
-            UpdateLocations();
         }
 
         // Open instructions
         private void informationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form f = new Form2();
-            f.StartPosition = FormStartPosition.Manual;
-            f.Left = this.Location.X;
-            f.Top = this.Location.Y;
             f.Show(this);
-        }
-
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form f = new Form3();
-            f.StartPosition = FormStartPosition.Manual;
-            f.Left = this.Location.X;
-            f.Top = this.Location.Y;
-            f.Show(this);
-        }
-
-        private void alwaysOntopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            alwaysOntopToolStripMenuItem.Checked = !alwaysOntopToolStripMenuItem.Checked;
-            this.TopMost = !this.TopMost;
-            Properties.Settings.Default.AlwaysOnTop = alwaysOntopToolStripMenuItem.Checked;
-            Properties.Settings.Default.Save();
-        }
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            DelayNumber.Text = trackBar1.Value.ToString();
         }
     }
 }

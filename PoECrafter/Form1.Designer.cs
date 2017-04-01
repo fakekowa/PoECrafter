@@ -53,12 +53,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.alwaysOntopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.materialLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.label9 = new System.Windows.Forms.Label();
-            this.DelayNumber = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RedWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenWant)).BeginInit();
@@ -68,7 +62,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.JewelersToUse)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WantSockets)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
             // RedWant
@@ -244,7 +237,7 @@
             // progressBar1
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 461);
+            this.progressBar1.Location = new System.Drawing.Point(0, 416);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(587, 23);
             this.progressBar1.Step = 1;
@@ -315,8 +308,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(587, 24);
@@ -334,68 +326,15 @@
             // informationToolStripMenuItem
             // 
             this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.informationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.Click += new System.EventHandler(this.informationToolStripMenuItem_Click);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.alwaysOntopToolStripMenuItem,
-            this.materialLocationToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // alwaysOntopToolStripMenuItem
-            // 
-            this.alwaysOntopToolStripMenuItem.Name = "alwaysOntopToolStripMenuItem";
-            this.alwaysOntopToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.alwaysOntopToolStripMenuItem.Text = "Always ontop";
-            this.alwaysOntopToolStripMenuItem.Click += new System.EventHandler(this.alwaysOntopToolStripMenuItem_Click);
-            // 
-            // materialLocationToolStripMenuItem
-            // 
-            this.materialLocationToolStripMenuItem.Name = "materialLocationToolStripMenuItem";
-            this.materialLocationToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.materialLocationToolStripMenuItem.Text = "Material Location";
-            this.materialLocationToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.Location = new System.Drawing.Point(0, 410);
-            this.trackBar1.Maximum = 1000;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(587, 45);
-            this.trackBar1.TabIndex = 24;
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 432);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(64, 13);
-            this.label9.TabIndex = 25;
-            this.label9.Text = "Extra Delay:";
-            // 
-            // DelayNumber
-            // 
-            this.DelayNumber.AutoSize = true;
-            this.DelayNumber.Location = new System.Drawing.Point(77, 433);
-            this.DelayNumber.Name = "DelayNumber";
-            this.DelayNumber.Size = new System.Drawing.Size(0, 13);
-            this.DelayNumber.TabIndex = 26;
             // 
             // ProgressBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 484);
-            this.Controls.Add(this.DelayNumber);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.trackBar1);
+            this.ClientSize = new System.Drawing.Size(587, 439);
             this.Controls.Add(this.JewelersToUse);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.SocketStart);
@@ -422,6 +361,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ProgressBar";
             this.Text = "PoECrafter";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.RedWant)).EndInit();
@@ -434,7 +374,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.WantSockets)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -466,12 +405,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem informationToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem alwaysOntopToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem materialLocationToolStripMenuItem;
-        private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label DelayNumber;
     }
 }
 
