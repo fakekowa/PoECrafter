@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>MUST place item into crafting section on currency tab
-MUST be 1920x1080 Boarderless (until i find out how to get the correct location with a variable window size)
+    <value>MUST place item into crafting section on currency tab OR set your own crafting item location
+MUST be 1920x1080 Boarderless OR you can set your own X and Y locations for each item
 
 Colors
     - It will keep the desired color when its the desired number or higher
