@@ -34,5 +34,125 @@ namespace WindowsFormsApplication3.Properties {
                 this["WindowLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AlwaysOnTop {
+            get {
+                return ((bool)(this["AlwaysOnTop"]));
+            }
+            set {
+                this["AlwaysOnTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("332")]
+        public int CraftItemX {
+            get {
+                return ((int)(this["CraftItemX"]));
+            }
+            set {
+                this["CraftItemX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("584")]
+        public int CraftItemY {
+            get {
+                return ((int)(this["CraftItemY"]));
+            }
+            set {
+                this["CraftItemY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("141")]
+        public int FusingX {
+            get {
+                return ((int)(this["FusingX"]));
+            }
+            set {
+                this["FusingX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("557")]
+        public int FusingY {
+            get {
+                return ((int)(this["FusingY"]));
+            }
+            set {
+                this["FusingY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("210")]
+        public int ChromaticX {
+            get {
+                return ((int)(this["ChromaticX"]));
+            }
+            set {
+                this["ChromaticX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("558")]
+        public int ChromaticY {
+            get {
+                return ((int)(this["ChromaticY"]));
+            }
+            set {
+                this["ChromaticY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("73")]
+        public int JewellerX {
+            get {
+                return ((int)(this["JewellerX"]));
+            }
+            set {
+                this["JewellerX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("556")]
+        public int JewellerY {
+            get {
+                return ((int)(this["JewellerY"]));
+            }
+            set {
+                this["JewellerY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AddedDelay {
+            get {
+                return ((int)(this["AddedDelay"]));
+            }
+            set {
+                this["AddedDelay"] = value;
+            }
+        }
     }
 }
