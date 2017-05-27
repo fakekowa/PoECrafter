@@ -56,10 +56,12 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alwaysOntopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.shiftClickFixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label9 = new System.Windows.Forms.Label();
             this.DelayNumber = new System.Windows.Forms.Label();
-            this.shiftClickFixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.processList = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RedWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenWant)).BeginInit();
@@ -74,7 +76,7 @@
             // 
             // RedWant
             // 
-            this.RedWant.Location = new System.Drawing.Point(293, 77);
+            this.RedWant.Location = new System.Drawing.Point(293, 96);
             this.RedWant.Maximum = new decimal(new int[] {
             6,
             0,
@@ -87,7 +89,7 @@
             // 
             // BlueWant
             // 
-            this.BlueWant.Location = new System.Drawing.Point(437, 77);
+            this.BlueWant.Location = new System.Drawing.Point(437, 96);
             this.BlueWant.Maximum = new decimal(new int[] {
             6,
             0,
@@ -100,7 +102,7 @@
             // 
             // GreenWant
             // 
-            this.GreenWant.Location = new System.Drawing.Point(372, 77);
+            this.GreenWant.Location = new System.Drawing.Point(372, 96);
             this.GreenWant.Maximum = new decimal(new int[] {
             6,
             0,
@@ -115,7 +117,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(289, 35);
+            this.label1.Location = new System.Drawing.Point(289, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(151, 23);
             this.label1.TabIndex = 4;
@@ -126,7 +128,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(304, 58);
+            this.label2.Location = new System.Drawing.Point(304, 77);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 16);
             this.label2.TabIndex = 5;
@@ -137,7 +139,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Green;
-            this.label3.Location = new System.Drawing.Point(382, 58);
+            this.label3.Location = new System.Drawing.Point(382, 77);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(18, 16);
             this.label3.TabIndex = 6;
@@ -148,7 +150,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Blue;
-            this.label4.Location = new System.Drawing.Point(450, 58);
+            this.label4.Location = new System.Drawing.Point(450, 77);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(18, 16);
             this.label4.TabIndex = 7;
@@ -158,7 +160,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(289, 312);
+            this.label5.Location = new System.Drawing.Point(289, 331);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(140, 23);
             this.label5.TabIndex = 8;
@@ -166,7 +168,7 @@
             // 
             // WantLinks
             // 
-            this.WantLinks.Location = new System.Drawing.Point(293, 355);
+            this.WantLinks.Location = new System.Drawing.Point(293, 374);
             this.WantLinks.Name = "WantLinks";
             this.WantLinks.Size = new System.Drawing.Size(47, 20);
             this.WantLinks.TabIndex = 9;
@@ -175,7 +177,7 @@
             // StartColors
             // 
             this.StartColors.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StartColors.Location = new System.Drawing.Point(293, 113);
+            this.StartColors.Location = new System.Drawing.Point(293, 132);
             this.StartColors.Name = "StartColors";
             this.StartColors.Size = new System.Drawing.Size(271, 23);
             this.StartColors.TabIndex = 10;
@@ -186,7 +188,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(293, 381);
+            this.button1.Location = new System.Drawing.Point(293, 400);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(271, 23);
             this.button1.TabIndex = 11;
@@ -196,7 +198,7 @@
             // 
             // ChromaticsToUse
             // 
-            this.ChromaticsToUse.Location = new System.Drawing.Point(497, 77);
+            this.ChromaticsToUse.Location = new System.Drawing.Point(497, 96);
             this.ChromaticsToUse.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -211,7 +213,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(494, 42);
+            this.label6.Location = new System.Drawing.Point(488, 61);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 32);
             this.label6.TabIndex = 13;
@@ -222,7 +224,7 @@
             // 
             this.FusingLabel.AutoSize = true;
             this.FusingLabel.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FusingLabel.Location = new System.Drawing.Point(500, 312);
+            this.FusingLabel.Location = new System.Drawing.Point(500, 331);
             this.FusingLabel.Name = "FusingLabel";
             this.FusingLabel.Size = new System.Drawing.Size(57, 32);
             this.FusingLabel.TabIndex = 14;
@@ -231,7 +233,7 @@
             // 
             // FusingsToUse
             // 
-            this.FusingsToUse.Location = new System.Drawing.Point(497, 355);
+            this.FusingsToUse.Location = new System.Drawing.Point(497, 374);
             this.FusingsToUse.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -245,7 +247,7 @@
             // progressBar1
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 461);
+            this.progressBar1.Location = new System.Drawing.Point(0, 485);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(587, 23);
             this.progressBar1.Step = 1;
@@ -253,7 +255,7 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 35);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 54);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.richTextBox1.Size = new System.Drawing.Size(260, 369);
@@ -262,7 +264,7 @@
             // 
             // JewelersToUse
             // 
-            this.JewelersToUse.Location = new System.Drawing.Point(497, 215);
+            this.JewelersToUse.Location = new System.Drawing.Point(497, 234);
             this.JewelersToUse.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -277,7 +279,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(500, 172);
+            this.label7.Location = new System.Drawing.Point(500, 191);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(64, 32);
             this.label7.TabIndex = 21;
@@ -287,7 +289,7 @@
             // SocketStart
             // 
             this.SocketStart.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SocketStart.Location = new System.Drawing.Point(293, 241);
+            this.SocketStart.Location = new System.Drawing.Point(293, 260);
             this.SocketStart.Name = "SocketStart";
             this.SocketStart.Size = new System.Drawing.Size(271, 23);
             this.SocketStart.TabIndex = 20;
@@ -297,7 +299,7 @@
             // 
             // WantSockets
             // 
-            this.WantSockets.Location = new System.Drawing.Point(293, 215);
+            this.WantSockets.Location = new System.Drawing.Point(293, 234);
             this.WantSockets.Name = "WantSockets";
             this.WantSockets.Size = new System.Drawing.Size(47, 20);
             this.WantSockets.TabIndex = 19;
@@ -307,7 +309,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(289, 172);
+            this.label8.Location = new System.Drawing.Point(289, 191);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(164, 23);
             this.label8.TabIndex = 18;
@@ -363,9 +365,16 @@
             this.materialLocationToolStripMenuItem.Text = "Material Location";
             this.materialLocationToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
+            // shiftClickFixToolStripMenuItem
+            // 
+            this.shiftClickFixToolStripMenuItem.Name = "shiftClickFixToolStripMenuItem";
+            this.shiftClickFixToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.shiftClickFixToolStripMenuItem.Text = "Shift Click Fix";
+            this.shiftClickFixToolStripMenuItem.Click += new System.EventHandler(this.shiftClickFixToolStripMenuItem_Click);
+            // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(0, 410);
+            this.trackBar1.Location = new System.Drawing.Point(0, 429);
             this.trackBar1.Maximum = 1000;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(587, 45);
@@ -376,7 +385,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 432);
+            this.label9.Location = new System.Drawing.Point(7, 451);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(64, 13);
             this.label9.TabIndex = 25;
@@ -385,23 +394,36 @@
             // DelayNumber
             // 
             this.DelayNumber.AutoSize = true;
-            this.DelayNumber.Location = new System.Drawing.Point(77, 433);
+            this.DelayNumber.Location = new System.Drawing.Point(77, 452);
             this.DelayNumber.Name = "DelayNumber";
             this.DelayNumber.Size = new System.Drawing.Size(0, 13);
             this.DelayNumber.TabIndex = 26;
             // 
-            // shiftClickFixToolStripMenuItem
+            // processList
             // 
-            this.shiftClickFixToolStripMenuItem.Name = "shiftClickFixToolStripMenuItem";
-            this.shiftClickFixToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.shiftClickFixToolStripMenuItem.Text = "Shift Click Fix";
-            this.shiftClickFixToolStripMenuItem.Click += new System.EventHandler(this.shiftClickFixToolStripMenuItem_Click);
+            this.processList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.processList.FormattingEnabled = true;
+            this.processList.Location = new System.Drawing.Point(106, 27);
+            this.processList.Name = "processList";
+            this.processList.Size = new System.Drawing.Size(458, 21);
+            this.processList.TabIndex = 27;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(9, 30);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(88, 13);
+            this.label10.TabIndex = 28;
+            this.label10.Text = "Process Override";
             // 
             // ProgressBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 484);
+            this.ClientSize = new System.Drawing.Size(587, 508);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.processList);
             this.Controls.Add(this.DelayNumber);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.trackBar1);
@@ -482,6 +504,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label DelayNumber;
         private System.Windows.Forms.ToolStripMenuItem shiftClickFixToolStripMenuItem;
+        private System.Windows.Forms.Label label10;
+        public System.Windows.Forms.ComboBox processList;
     }
 }
 

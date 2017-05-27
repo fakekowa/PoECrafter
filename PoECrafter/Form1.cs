@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Management;
 
 namespace WindowsFormsApplication3
 {
@@ -28,7 +29,9 @@ namespace WindowsFormsApplication3
         public static extern bool ShowWindowAsync(HandleRef hWnd, int nCmdShow);
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr WindowHandle);
-        public const int SW_RESTORE = 9;
+        [DllImport("user32.dll")]
+        private static extern int ShowWindow(IntPtr hWnd, uint Msg);
+        private const uint SW_RESTORE = 0x09;
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
 
@@ -61,6 +64,10 @@ namespace WindowsFormsApplication3
         private const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
         private const int MOUSEEVENTF_MIDDLEUP = 0x0040;
         private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+
+
+        public bool OverRide = false;
+        public Process whatToOverRideWith = null;
 
         string Item;
         string Sockets;
@@ -615,26 +622,62 @@ namespace WindowsFormsApplication3
 
         }
 
-        // Focus Path of Exile Window
-        public static bool FocusPoE()
+        // Generate list of processors to select from if its not wokring right
+        public void GenerateGetProcessors()
         {
-            foreach (Process p in Process.GetProcesses("."))
+            var wmiQueryString = "SELECT ProcessId, ExecutablePath, CommandLine FROM Win32_Process";
+            using (var searcher = new ManagementObjectSearcher(wmiQueryString))
+            using (var results = searcher.Get())
             {
-                try
+                var query = from p in Process.GetProcesses()
+                            join mo in results.Cast<ManagementObject>()
+                            on p.Id equals (int)(uint)mo["ProcessId"]
+                            select new
+                            {
+                                Process = p,
+                                Path = (string)mo["ExecutablePath"],
+                                CommandLine = (string)mo["CommandLine"],
+                            };
+                foreach (var item in query)
                 {
-                    if (p.MainWindowTitle.Length > 0)
+                    // Do what you want with the Process, Path, and CommandLine
+                    if (item.Process.MainWindowTitle != "")
                     {
-
-                        if (p.MainWindowTitle.Contains("Path of Exile"))
-                        {
-                            SetForegroundWindow(p.MainWindowHandle);
-                            return true;
-                        }
+                        processList.Items.Add(new ComboBoxItem(item.Process.MainWindowTitle + " - [" + item.Process.StartTime.ToShortTimeString() + "]", item.Process.MainWindowHandle));
                     }
                 }
-                catch (Exception ex)
+            }
+        }
+
+        // Focus Path of Exile Window
+        public bool FocusPoE()
+        {
+            if (processList.SelectedIndex == -1)
+            {
+                foreach (Process p in Process.GetProcesses("."))
                 {
-                }
+                    try
+                    {
+                        if (p.MainWindowTitle.Length > 0)
+                        {
+
+                            if (p.MainWindowTitle.Contains("Path of Exile"))
+                            {
+                                SetForegroundWindow(p.MainWindowHandle);
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                } 
+            }
+            else
+            {
+                ShowWindow(((ComboBoxItem)processList.SelectedItem).HiddenValue, SW_RESTORE);
+                SetForegroundWindow(((ComboBoxItem)processList.SelectedItem).HiddenValue);
+                return true;
             }
 
             return false;
@@ -678,6 +721,7 @@ namespace WindowsFormsApplication3
             alwaysOntopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
             shiftClickFixToolStripMenuItem.Checked = Properties.Settings.Default.ShiftClickFix;
 
+            GenerateGetProcessors();
             UpdateLocations();
         }
 
@@ -718,6 +762,34 @@ namespace WindowsFormsApplication3
             shiftClickFixToolStripMenuItem.Checked = !shiftClickFixToolStripMenuItem.Checked;
             Properties.Settings.Default.ShiftClickFix = shiftClickFixToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
+        }
+    }
+
+    public class ComboBoxItem
+    {
+        string DisplayText;
+        IntPtr Value;
+
+        //Constructor
+        public ComboBoxItem(string a, IntPtr b)
+        {
+            DisplayText = a;
+            Value = b;
+        }
+
+        //Accessor
+        public IntPtr HiddenValue
+        {
+            get
+            {
+                return Value;
+            }
+        }
+
+        //Override ToString method
+        public override string ToString()
+        {
+            return DisplayText;
         }
     }
 }
