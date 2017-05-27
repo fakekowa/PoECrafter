@@ -154,5 +154,17 @@ namespace WindowsFormsApplication3.Properties {
                 this["AddedDelay"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShiftClickFix {
+            get {
+                return ((bool)(this["ShiftClickFix"]));
+            }
+            set {
+                this["ShiftClickFix"] = value;
+            }
+        }
     }
 }

@@ -59,6 +59,7 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label9 = new System.Windows.Forms.Label();
             this.DelayNumber = new System.Windows.Forms.Label();
+            this.shiftClickFixToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.RedWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenWant)).BeginInit();
@@ -342,7 +343,8 @@
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.alwaysOntopToolStripMenuItem,
-            this.materialLocationToolStripMenuItem});
+            this.materialLocationToolStripMenuItem,
+            this.shiftClickFixToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -387,6 +389,13 @@
             this.DelayNumber.Name = "DelayNumber";
             this.DelayNumber.Size = new System.Drawing.Size(0, 13);
             this.DelayNumber.TabIndex = 26;
+            // 
+            // shiftClickFixToolStripMenuItem
+            // 
+            this.shiftClickFixToolStripMenuItem.Name = "shiftClickFixToolStripMenuItem";
+            this.shiftClickFixToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.shiftClickFixToolStripMenuItem.Text = "Shift Click Fix";
+            this.shiftClickFixToolStripMenuItem.Click += new System.EventHandler(this.shiftClickFixToolStripMenuItem_Click);
             // 
             // ProgressBar
             // 
@@ -472,6 +481,7 @@
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label DelayNumber;
+        private System.Windows.Forms.ToolStripMenuItem shiftClickFixToolStripMenuItem;
     }
 }
 

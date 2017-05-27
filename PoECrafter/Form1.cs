@@ -19,6 +19,7 @@ namespace WindowsFormsApplication3
         public ProgressBar()
         {
             InitializeComponent();
+            AddClipboardFormatListener(this.Handle);    // Add our window to the clipboard's format listener list.
         }
 
         [DllImport("user32.dll", EntryPoint = "SetCursorPos")]
@@ -30,6 +31,26 @@ namespace WindowsFormsApplication3
         public const int SW_RESTORE = 9;
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+
+        /// <summary>
+        /// Places the given window in the system-maintained clipboard format listener list.
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AddClipboardFormatListener(IntPtr hwnd);
+
+        /// <summary>
+        /// Removes the given window from the system-maintained clipboard format listener list.
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
+
+        /// <summary>
+        /// Sent when the contents of the clipboard have changed.
+        /// </summary>
+        private const int WM_CLIPBOARDUPDATE = 0x031D;
+
 
         // constants for the mouse_input() API function
         private const int MOUSEEVENTF_MOVE = 0x0001;
@@ -50,7 +71,6 @@ namespace WindowsFormsApplication3
         decimal GreenSockets = 0;
         decimal RedSockets = 0;
         decimal WhiteSockets = 0;
-
         // Locations
 
         public class CraftingLocation
@@ -99,6 +119,21 @@ namespace WindowsFormsApplication3
         {
             mouse_event(MOUSEEVENTF_RIGHTDOWN, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
             mouse_event(MOUSEEVENTF_RIGHTUP, Control.MousePosition.X, Control.MousePosition.Y, 0, 0);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == WM_CLIPBOARDUPDATE)
+            {
+                IDataObject iData = Clipboard.GetDataObject();      // Clipboard's data.
+                if (iData.GetDataPresent(DataFormats.Text))
+                {
+                    // stuff here
+                    Item = (string)iData.GetData(DataFormats.Text);
+                }
+            }
         }
 
         public void GetItem()
@@ -173,49 +208,95 @@ namespace WindowsFormsApplication3
             if (FocusPoE())
             {
                 decimal Roll = 0;
-                var CraftStarted = false;
-                VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                VirtualKeyboard.KeyUp(Keys.LShiftKey);
-
-                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                Item = Clipboard.GetText();
-                GetItem();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                while (LinkCount < WantLinks.Value && Roll < FusingsToUse.Value)
+                if (!shiftClickFixToolStripMenuItem.Checked)
                 {
+                    var CraftStarted = false;
+                    FocusPoE();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
 
-                    // Do Reroll
-                    if (!CraftStarted)
-                    {
-                        VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.Fusing[0], CraftingLocation.Fusing[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-
-                    }
-                    CraftStarted = true;
-                    LeftClick();
+                    SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                     SendKeys.Send("^(C)");
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    Item = Clipboard.GetText();
+
                     GetItem();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    while (LinkCount < WantLinks.Value && Roll < FusingsToUse.Value)
+                    {
 
-                    print(LinkCount + " Links", Color.Black);
-                    print(Environment.NewLine, Color.Black);
+                        // Do Reroll
+                        if (!CraftStarted)
+                        {
+                            VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            SetCursorPos(CraftingLocation.Fusing[0], CraftingLocation.Fusing[1]);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            RightClick();
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+
+                        }
+                        CraftStarted = true;
+                        LeftClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        SendKeys.Send("^(C)");
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                        GetItem();
+
+                        print(LinkCount + " Links", Color.Black);
+                        print(Environment.NewLine, Color.Black);
 
 
-                    Roll = Roll + 1;
+                        Roll = Roll + 1;
 
-                    ProgressBarUpDate(Roll, FusingsToUse.Value);
+                        ProgressBarUpDate(Roll, FusingsToUse.Value);
+                    }
+                }
+                else
+                {
+                    FocusPoE();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
+
+                    SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    SendKeys.Send("^(C)");
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                    GetItem();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    while (LinkCount < WantLinks.Value && Roll < FusingsToUse.Value)
+                    {
+
+                        // Do Reroll
+                        SetCursorPos(CraftingLocation.Fusing[0], CraftingLocation.Fusing[1]);
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        RightClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        LeftClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        SendKeys.Send("^(C)");
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                        GetItem();
+
+                        print(LinkCount + " Links", Color.Black);
+                        print(Environment.NewLine, Color.Black);
+
+
+                        Roll = Roll + 1;
+
+                        ProgressBarUpDate(Roll, FusingsToUse.Value);
+                    }
                 }
                 if (LinkCount >= WantLinks.Value)
                 {
@@ -250,55 +331,28 @@ namespace WindowsFormsApplication3
             if (FocusPoE())
             {
                 decimal Roll = 0;
-                var CraftStarted = false;
-
                 decimal RedDesired = RedWant.Value;
                 decimal GreenDesired = GreenWant.Value;
                 decimal BlueDesired = BlueWant.Value;
 
-                FocusPoE();
-                VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                VirtualKeyboard.KeyUp(Keys.LShiftKey);
-
-                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                Item = Clipboard.GetText();
-                GetItem();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-
-                if (RedWant.Value == 0)
-                    RedDesired = RedSockets;
-                if (GreenWant.Value == 0)
-                    GreenDesired = GreenSockets;
-                if (BlueWant.Value == 0)
-                    BlueDesired = BlueSockets;
-
-                while ((RedSockets < RedDesired || GreenSockets < GreenDesired || BlueSockets < BlueDesired) && Roll < ChromaticsToUse.Value)
+                if (!shiftClickFixToolStripMenuItem.Checked)
                 {
+                    var CraftStarted = false;
 
-                    // Do Reroll
-                    if (!CraftStarted)
-                    {
-                        VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.Chromatic[0], CraftingLocation.Chromatic[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                    }
-                    CraftStarted = true;
-                    LeftClick();
+                    FocusPoE();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
+
+                    SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                     SendKeys.Send("^(C)");
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    Item = Clipboard.GetText();
+
                     GetItem();
-                    
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
                     if (RedWant.Value == 0)
                         RedDesired = RedSockets;
                     if (GreenWant.Value == 0)
@@ -306,18 +360,110 @@ namespace WindowsFormsApplication3
                     if (BlueWant.Value == 0)
                         BlueDesired = BlueSockets;
 
-                    print(RedSockets, Color.Red);
-                    print("          ", Color.Black);
-                    print(GreenSockets, Color.Green);
-                    print("          ", Color.Black);
-                    print(BlueSockets, Color.Blue);
-                    print("          ", Color.Black);
-                    print(Environment.NewLine, Color.Black);
+                    while ((RedSockets < RedDesired || GreenSockets < GreenDesired || BlueSockets < BlueDesired) && Roll < ChromaticsToUse.Value)
+                    {
+
+                        // Do Reroll
+                        if (!CraftStarted)
+                        {
+                            VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            SetCursorPos(CraftingLocation.Chromatic[0], CraftingLocation.Chromatic[1]);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            RightClick();
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        }
+                        CraftStarted = true;
+                        LeftClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        SendKeys.Send("^(C)");
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                        GetItem();
+
+                        if (RedWant.Value == 0)
+                            RedDesired = RedSockets;
+                        if (GreenWant.Value == 0)
+                            GreenDesired = GreenSockets;
+                        if (BlueWant.Value == 0)
+                            BlueDesired = BlueSockets;
+
+                        print(RedSockets, Color.Red);
+                        print("          ", Color.Black);
+                        print(GreenSockets, Color.Green);
+                        print("          ", Color.Black);
+                        print(BlueSockets, Color.Blue);
+                        print("          ", Color.Black);
+                        print(Environment.NewLine, Color.Black);
 
 
-                    Roll = Roll + 1;
+                        Roll = Roll + 1;
 
-                    ProgressBarUpDate(Roll, ChromaticsToUse.Value);
+                        ProgressBarUpDate(Roll, ChromaticsToUse.Value);
+                    }
+                }
+                else
+                {
+                    FocusPoE();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
+
+                    SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    SendKeys.Send("^(C)");
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                    GetItem();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                    if (RedWant.Value == 0)
+                        RedDesired = RedSockets;
+                    if (GreenWant.Value == 0)
+                        GreenDesired = GreenSockets;
+                    if (BlueWant.Value == 0)
+                        BlueDesired = BlueSockets;
+
+                    while ((RedSockets < RedDesired || GreenSockets < GreenDesired || BlueSockets < BlueDesired) && Roll < ChromaticsToUse.Value)
+                    {
+
+                        // Do Reroll
+                        SetCursorPos(CraftingLocation.Chromatic[0], CraftingLocation.Chromatic[1]);
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        RightClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        LeftClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        SendKeys.Send("^(C)");
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                        GetItem();
+
+                        if (RedWant.Value == 0)
+                            RedDesired = RedSockets;
+                        if (GreenWant.Value == 0)
+                            GreenDesired = GreenSockets;
+                        if (BlueWant.Value == 0)
+                            BlueDesired = BlueSockets;
+
+                        print(RedSockets, Color.Red);
+                        print("          ", Color.Black);
+                        print(GreenSockets, Color.Green);
+                        print("          ", Color.Black);
+                        print(BlueSockets, Color.Blue);
+                        print("          ", Color.Black);
+                        print(Environment.NewLine, Color.Black);
+
+
+                        Roll = Roll + 1;
+
+                        ProgressBarUpDate(Roll, ChromaticsToUse.Value);
+                    }
                 }
                 if (RedSockets >= RedDesired && GreenSockets >= GreenDesired && BlueSockets >= BlueDesired)
                 {
@@ -351,51 +497,97 @@ namespace WindowsFormsApplication3
             if (FocusPoE())
             {
                 decimal Roll = 0;
-                var CraftStarted = false;
-                FocusPoE();
-                VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                VirtualKeyboard.KeyUp(Keys.LShiftKey);
-
-                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                Item = Clipboard.GetText();
-                GetItem();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                while (SocketCount < WantSockets.Value && Roll < JewelersToUse.Value)
+                if (!shiftClickFixToolStripMenuItem.Checked)
                 {
+                    var CraftStarted = false;
+                    FocusPoE();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
 
-                    // Do Reroll
-                    if (!CraftStarted)
-                    {
-                        VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.Jeweler[0], CraftingLocation.Jeweler[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-
-                    }
-                    CraftStarted = true;
-                    LeftClick();
+                    SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                     SendKeys.Send("^(C)");
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    Item = Clipboard.GetText();
+
                     GetItem();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    while (SocketCount < WantSockets.Value && Roll < JewelersToUse.Value)
+                    {
 
-                    print(SocketCount + " Sockets", Color.Black);
-                    print(Environment.NewLine, Color.Black);
+                        // Do Reroll
+                        if (!CraftStarted)
+                        {
+                            VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            SetCursorPos(CraftingLocation.Jeweler[0], CraftingLocation.Jeweler[1]);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            RightClick();
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                            SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                            await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+
+                        }
+                        CraftStarted = true;
+                        LeftClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                        SendKeys.Send("^(C)");
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                        GetItem();
+
+                        print(SocketCount + " Sockets", Color.Black);
+                        print(Environment.NewLine, Color.Black);
 
 
-                    Roll = Roll + 1;
+                        Roll = Roll + 1;
 
-                    ProgressBarUpDate(Roll, JewelersToUse.Value);
+                        ProgressBarUpDate(Roll, JewelersToUse.Value);
+                    }
                 }
+                else
+                {
+                    FocusPoE();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
+
+                    SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                    SendKeys.Send("^(C)");
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                    GetItem();
+                    await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                    while (SocketCount < WantSockets.Value && Roll < JewelersToUse.Value)
+                    {
+
+                        // Do Reroll
+                        SetCursorPos(CraftingLocation.Jeweler[0], CraftingLocation.Jeweler[1]);
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        RightClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        LeftClick();
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
+                        SendKeys.Send("^(C)");
+                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+
+                        GetItem();
+
+                        print(SocketCount + " Sockets", Color.Black);
+                        print(Environment.NewLine, Color.Black);
+
+
+                        Roll = Roll + 1;
+
+                        ProgressBarUpDate(Roll, JewelersToUse.Value);
+                    }
+                }
+
                 if (SocketCount >= WantSockets.Value)
                 {
                     print("--------------------------------------", Color.Black);
@@ -413,7 +605,7 @@ namespace WindowsFormsApplication3
                 print(Environment.NewLine, Color.Black);
                 VirtualKeyboard.KeyUp(Keys.LShiftKey);
                 progressBar1.Value = 100;
-                Roll = 0; 
+                Roll = 0;
             }
             else
             {
@@ -484,6 +676,8 @@ namespace WindowsFormsApplication3
             DelayNumber.Text = Properties.Settings.Default.AddedDelay.ToString();
             trackBar1.Value = Properties.Settings.Default.AddedDelay;
             alwaysOntopToolStripMenuItem.Checked = Properties.Settings.Default.AlwaysOnTop;
+            shiftClickFixToolStripMenuItem.Checked = Properties.Settings.Default.ShiftClickFix;
+
             UpdateLocations();
         }
 
@@ -517,6 +711,13 @@ namespace WindowsFormsApplication3
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             DelayNumber.Text = trackBar1.Value.ToString();
+        }
+
+        private void shiftClickFixToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            shiftClickFixToolStripMenuItem.Checked = !shiftClickFixToolStripMenuItem.Checked;
+            Properties.Settings.Default.ShiftClickFix = shiftClickFixToolStripMenuItem.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }
