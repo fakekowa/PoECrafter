@@ -104,6 +104,13 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\icon-refresh-128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\21x21 REFRESH.png" />
+    <Content Include="resources\refresh_grey_192x192.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

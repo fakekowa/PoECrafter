@@ -62,6 +62,7 @@
             this.DelayNumber = new System.Windows.Forms.Label();
             this.processList = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.RedWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BlueWant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GreenWant)).BeginInit();
@@ -405,7 +406,7 @@
             this.processList.FormattingEnabled = true;
             this.processList.Location = new System.Drawing.Point(106, 27);
             this.processList.Name = "processList";
-            this.processList.Size = new System.Drawing.Size(458, 21);
+            this.processList.Size = new System.Drawing.Size(436, 21);
             this.processList.TabIndex = 27;
             // 
             // label10
@@ -417,11 +418,24 @@
             this.label10.TabIndex = 28;
             this.label10.Text = "Process Override";
             // 
+            // button2
+            // 
+            this.button2.BackgroundImage = global::WindowsFormsApplication3.Properties.Resources._21x21_REFRESH;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.Location = new System.Drawing.Point(548, 27);
+            this.button2.Margin = new System.Windows.Forms.Padding(0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(21, 21);
+            this.button2.TabIndex = 29;
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // ProgressBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(587, 508);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.processList);
             this.Controls.Add(this.DelayNumber);
@@ -506,6 +520,7 @@
         private System.Windows.Forms.ToolStripMenuItem shiftClickFixToolStripMenuItem;
         private System.Windows.Forms.Label label10;
         public System.Windows.Forms.ComboBox processList;
+        private System.Windows.Forms.Button button2;
     }
 }
 

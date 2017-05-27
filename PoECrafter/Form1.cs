@@ -647,6 +647,7 @@ namespace WindowsFormsApplication3
                     }
                 }
             }
+            button2.BackgroundImage = Image.FromFile(@"resources\icon-refresh-128.png");
         }
 
         // Focus Path of Exile Window
@@ -762,6 +763,12 @@ namespace WindowsFormsApplication3
             shiftClickFixToolStripMenuItem.Checked = !shiftClickFixToolStripMenuItem.Checked;
             Properties.Settings.Default.ShiftClickFix = shiftClickFixToolStripMenuItem.Checked;
             Properties.Settings.Default.Save();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            processList.Items.Clear();
+            GenerateGetProcessors();
         }
     }
 
