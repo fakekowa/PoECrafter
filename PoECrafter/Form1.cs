@@ -647,7 +647,6 @@ namespace WindowsFormsApplication3
                     }
                 }
             }
-            button2.BackgroundImage = Image.FromFile(@"resources\icon-refresh-128.png");
         }
 
         // Focus Path of Exile Window

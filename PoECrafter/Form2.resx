@@ -136,6 +136,19 @@ Links
      - Example: You have 3 links and want 4, if it Rolls 4 or more it will stop
 
 Materials to use
-     - Input the amount you want used</value>
+     - Input the amount you want used
+
+Process Override
+     - Override the automatic process selection with the one you choose
+     - Pressing the refresh button will return the process selection to automatic and will also
+       refresh the list with the up to date processes
+
+Extra Delay
+     - Add extra delay ontop of the current delays in the program if you are having issues with lag
+
+Settings &gt; Shift Click Fix
+     - Having this enabled will stop the use of holding down shift and spamming left click
+       instead it will right click the crafting mat and left click the item being crafted over and over
+       resulting in a longer time to complete but ensures the shift bug doesnt happen</value>
   </data>
 </root>

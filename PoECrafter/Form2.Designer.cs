@@ -37,7 +37,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(443, 247);
+            this.label1.Size = new System.Drawing.Size(452, 416);
             this.label1.TabIndex = 0;
             this.label1.Text = resources.GetString("label1.Text");
             // 
@@ -45,7 +45,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 278);
+            this.ClientSize = new System.Drawing.Size(466, 434);
             this.Controls.Add(this.label1);
             this.Name = "Form2";
             this.Text = "PoECrafter Information";
