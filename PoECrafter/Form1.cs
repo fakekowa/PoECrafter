@@ -31,9 +31,12 @@ namespace WindowsFormsApplication3
         public static extern bool SetForegroundWindow(IntPtr WindowHandle);
         [DllImport("user32.dll")]
         private static extern int ShowWindow(IntPtr hWnd, uint Msg);
+        private const uint SW_MAXIMIZE = 3;
         private const uint SW_RESTORE = 0x09;
         [DllImport("user32.dll")]
         static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+        [DllImport("USER32.DLL")]
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
@@ -675,7 +678,7 @@ namespace WindowsFormsApplication3
             }
             else
             {
-                ShowWindow(((ComboBoxItem)processList.SelectedItem).HiddenValue, SW_RESTORE);
+                ShowWindow(((ComboBoxItem)processList.SelectedItem).HiddenValue, SW_MAXIMIZE);
                 SetForegroundWindow(((ComboBoxItem)processList.SelectedItem).HiddenValue);
                 return true;
             }
@@ -704,6 +707,31 @@ namespace WindowsFormsApplication3
             richTextBox1.ScrollToCaret();
         }
 
+        // just random shit, ignore
+        public void ListProcesses()
+        {
+            Process[] processlist = Process.GetProcesses();
+
+            foreach (Process theprocess in processlist)
+            {
+
+                if (theprocess.MainWindowTitle.Length > 0)
+                {
+                    Process process = Process.GetProcessById(theprocess.Id); //PID of what you want
+                    StringBuilder className = new StringBuilder(100);
+                    int nret = GetClassName(theprocess.MainWindowHandle, className, className.Capacity);
+
+                    richTextBox1.SelectionStart = richTextBox1.TextLength;
+                    richTextBox1.SelectionLength = 0;
+
+                    richTextBox1.SelectionColor = Color.Black;
+                    richTextBox1.AppendText(theprocess.MainWindowTitle + " - " + className + "\n");
+                    richTextBox1.SelectionColor = richTextBox1.ForeColor;
+                    richTextBox1.ScrollToCaret();
+                }
+            }
+        }
+
         // Save/Load Window Location
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -723,6 +751,7 @@ namespace WindowsFormsApplication3
 
             GenerateGetProcessors();
             UpdateLocations();
+            //ListProcesses();
         }
 
         // Open instructions
