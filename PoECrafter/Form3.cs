@@ -1,4 +1,5 @@
 ﻿using System;
+using Gma.System.MouseKeyHook;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,7 @@ namespace WindowsFormsApplication3
 {
     public partial class Form3 : Form
     {
+        private IKeyboardMouseEvents m_GlobalHook;
         public Form3()
         {
             InitializeComponent();
@@ -92,6 +94,72 @@ namespace WindowsFormsApplication3
             Properties.Settings.Default.FusingY = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            m_GlobalHook = Hook.GlobalEvents();
+
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                unhook();
+            }
+            );
+            m_GlobalHook.MouseMove += Form3_MouseMove;
+            m_GlobalHook.OnCombination(dic);
+        }
+
+        private void unhook()
+        {
+            m_GlobalHook.MouseMove -= Form3_MouseMove;
+            m_GlobalHook.MouseMove -= Form1_MouseMove;
+            m_GlobalHook.MouseMove -= Form2_MouseMove;
+            m_GlobalHook.Dispose();
+        }
+
+        private void Form3_MouseMove(object sender, MouseEventArgs e)
+        {
+            CraftMatX.Text = e.X.ToString();
+            CraftMatY.Text = e.Y.ToString();
+        }
+        private void Form2_MouseMove(object sender, MouseEventArgs e)
+        {
+            ChromaticX.Text = e.X.ToString();
+            ChromaticY.Text = e.Y.ToString();
+        }
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            FusingX.Text = e.X.ToString();
+            FusingY.Text = e.Y.ToString();
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            m_GlobalHook = Hook.GlobalEvents();
+
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                unhook();
+            }
+            );
+            m_GlobalHook.MouseMove += Form2_MouseMove;
+            m_GlobalHook.OnCombination(dic);
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+            m_GlobalHook = Hook.GlobalEvents();
+
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                unhook();
+            }
+            );
+            m_GlobalHook.MouseMove += Form1_MouseMove;
+            m_GlobalHook.OnCombination(dic);
         }
     }
 }
