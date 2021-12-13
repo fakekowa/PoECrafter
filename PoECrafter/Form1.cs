@@ -90,8 +90,8 @@ namespace WindowsFormsApplication3
         public class CraftingLocation
         {
             public static int[] CraftMat = { 0, 0 };
-            public static int[] Fusing = { 0, 0 };
-            public static int[] Chromatic = { 0, 0 };
+            public static int[] Alteration = { 0, 0 };
+            public static int[] Chaos = { 0, 0 };
             public static int[] Jeweler = { 0, 0 };
         }
 
@@ -100,12 +100,12 @@ namespace WindowsFormsApplication3
             // Locations
             CraftingLocation.CraftMat[0] = Properties.Settings.Default.CraftItemX;
             CraftingLocation.CraftMat[1] = Properties.Settings.Default.CraftItemY;
-            CraftingLocation.Fusing[0] = Properties.Settings.Default.FusingX;
-            CraftingLocation.Fusing[1] = Properties.Settings.Default.FusingY;
-            CraftingLocation.Chromatic[0] = Properties.Settings.Default.ChromaticX;
-            CraftingLocation.Chromatic[1] = Properties.Settings.Default.ChromaticY;
-            CraftingLocation.Jeweler[0] = Properties.Settings.Default.JewellerX;
-            CraftingLocation.Jeweler[1] = Properties.Settings.Default.JewellerY;
+            CraftingLocation.Alteration[0] = Properties.Settings.Default.AlterationX;
+            CraftingLocation.Alteration[1] = Properties.Settings.Default.AlterationY;
+            CraftingLocation.Chaos[0] = Properties.Settings.Default.ChaosX;
+            CraftingLocation.Chaos[1] = Properties.Settings.Default.ChaosY;
+            CraftingLocation.Jeweler[0] = Properties.Settings.Default.AugmentationX;
+            CraftingLocation.Jeweler[1] = Properties.Settings.Default.AugmentationY;
         }
 
         public static class VirtualKeyboard
@@ -250,7 +250,7 @@ namespace WindowsFormsApplication3
 
                     GetItem();
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    while (LinkCount < WantLinks.Value && Roll < FusingsToUse.Value)
+                    while (!ruleMatch && Roll < FusingsToUse.Value)
                     {
 
                         // Do Reroll
@@ -258,7 +258,7 @@ namespace WindowsFormsApplication3
                         {
                             VirtualKeyboard.KeyDown(Keys.LShiftKey);
                             await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                            SetCursorPos(CraftingLocation.Fusing[0], CraftingLocation.Fusing[1]);
+                            SetCursorPos(CraftingLocation.Alteration[0], CraftingLocation.Alteration[1]);
                             await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
                             RightClick();
                             await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
@@ -298,11 +298,11 @@ namespace WindowsFormsApplication3
 
                     GetItem();
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    while (LinkCount < WantLinks.Value && Roll < FusingsToUse.Value)
+                    while (!ruleMatch && Roll < FusingsToUse.Value)
                     {
 
                         // Do Reroll
-                        SetCursorPos(CraftingLocation.Fusing[0], CraftingLocation.Fusing[1]);
+                        SetCursorPos(CraftingLocation.Alteration[0], CraftingLocation.Alteration[1]);
                         await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
                         RightClick();
                         await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
@@ -324,7 +324,7 @@ namespace WindowsFormsApplication3
                         ProgressBarUpDate(Roll, FusingsToUse.Value);
                     }
                 }
-                if (LinkCount >= WantLinks.Value)
+                if (ruleMatch)
                 {
                     print("--------------------------------------", Color.Black);
                     print(Environment.NewLine, Color.Black);
@@ -377,7 +377,7 @@ namespace WindowsFormsApplication3
                     {
 
                         // Do Reroll
-                        SetCursorPos(CraftingLocation.Chromatic[0], CraftingLocation.Chromatic[1]);
+                        SetCursorPos(CraftingLocation.Chaos[0], CraftingLocation.Chaos[1]);
                         await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
                         RightClick();
                         await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
@@ -468,7 +468,7 @@ namespace WindowsFormsApplication3
 
                     GetItem();
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    while (SocketCount < WantSockets.Value && Roll < JewelersToUse.Value)
+                    while (!ruleMatch && Roll < JewelersToUse.Value)
                     {
 
                         // Do Reroll
@@ -516,7 +516,7 @@ namespace WindowsFormsApplication3
 
                     GetItem();
                     await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
-                    while (SocketCount < WantSockets.Value && Roll < JewelersToUse.Value)
+                    while (!ruleMatch && Roll < JewelersToUse.Value)
                     {
 
                         // Do Reroll
@@ -543,7 +543,7 @@ namespace WindowsFormsApplication3
                     }
                 }
 
-                if (SocketCount >= WantSockets.Value)
+                if (ruleMatch)
                 {
                     print("--------------------------------------", Color.Black);
                     print(Environment.NewLine, Color.Black);
@@ -710,7 +710,7 @@ namespace WindowsFormsApplication3
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form f = new Form3();
+            Form f = new LocationForm();
             f.StartPosition = FormStartPosition.Manual;
             f.Left = this.Location.X;
             f.Top = this.Location.Y;
@@ -741,6 +741,15 @@ namespace WindowsFormsApplication3
         {
             processList.Items.Clear();
             GenerateGetProcessors();
+        }
+
+        private void craftingRulesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form f = new RuleForm();
+            f.StartPosition = FormStartPosition.Manual;
+            f.Left = this.Location.X;
+            f.Top = this.Location.Y;
+            f.Show(this);
         }
     }
 

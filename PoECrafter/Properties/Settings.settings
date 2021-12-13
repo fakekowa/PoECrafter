@@ -14,22 +14,22 @@
     <Setting Name="CraftItemY" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">584</Value>
     </Setting>
-    <Setting Name="FusingX" Type="System.Int32" Scope="User">
+    <Setting Name="AlterationX" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">141</Value>
     </Setting>
-    <Setting Name="FusingY" Type="System.Int32" Scope="User">
+    <Setting Name="AlterationY" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">557</Value>
     </Setting>
-    <Setting Name="ChromaticX" Type="System.Int32" Scope="User">
+    <Setting Name="ChaosX" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">210</Value>
     </Setting>
-    <Setting Name="ChromaticY" Type="System.Int32" Scope="User">
+    <Setting Name="ChaosY" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">558</Value>
     </Setting>
-    <Setting Name="JewellerX" Type="System.Int32" Scope="User">
+    <Setting Name="AugmentationX" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">73</Value>
     </Setting>
-    <Setting Name="JewellerY" Type="System.Int32" Scope="User">
+    <Setting Name="AugmentationY" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">556</Value>
     </Setting>
     <Setting Name="AddedDelay" Type="System.Int32" Scope="User">

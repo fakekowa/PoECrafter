@@ -12,20 +12,20 @@ using WindowsFormsApplication3;
 
 namespace WindowsFormsApplication3
 {
-    public partial class Form3 : Form
+    public partial class LocationForm : Form
     {
         private IKeyboardMouseEvents m_GlobalHook;
-        public Form3()
+        public LocationForm()
         {
             InitializeComponent();
             CraftMatX.Text = Properties.Settings.Default.CraftItemX.ToString();
             CraftMatY.Text = Properties.Settings.Default.CraftItemY.ToString();
-            FusingX.Text = Properties.Settings.Default.FusingX.ToString();
-            FusingY.Text = Properties.Settings.Default.FusingY.ToString();
-            ChromaticX.Text = Properties.Settings.Default.ChromaticX.ToString();
-            ChromaticY.Text = Properties.Settings.Default.ChromaticY.ToString();
-            JewelersX.Text = Properties.Settings.Default.JewellerX.ToString();
-            JewelersY.Text = Properties.Settings.Default.JewellerY.ToString();
+            AlterationX.Text = Properties.Settings.Default.AlterationX.ToString();
+            AlterationY.Text = Properties.Settings.Default.AlterationY.ToString();
+            ChaosX.Text = Properties.Settings.Default.ChaosX.ToString();
+            ChaosY.Text = Properties.Settings.Default.ChaosY.ToString();
+            AugmentationX.Text = Properties.Settings.Default.AugmentationX.ToString();
+            AugmentationY.Text = Properties.Settings.Default.AugmentationY.ToString();
         }
 
         private void Form3_Load(object sender, EventArgs e)
@@ -48,50 +48,50 @@ namespace WindowsFormsApplication3
             ProgressBar.UpdateLocations();
         }
 
-        private void ChromaticX_TextChanged(object sender, EventArgs e)
+        private void ChaosX_TextChanged(object sender, EventArgs e)
         {
-            int Location = int.Parse(ChromaticX.Text);
-            Properties.Settings.Default.ChromaticX = Location;
+            int Location = int.Parse(ChaosX.Text);
+            Properties.Settings.Default.ChaosX = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
         }
 
-        private void ChromaticY_TextChanged(object sender, EventArgs e)
+        private void ChaosY_TextChanged(object sender, EventArgs e)
         {
-            int Location = int.Parse(ChromaticY.Text);
-            Properties.Settings.Default.ChromaticY = Location;
+            int Location = int.Parse(ChaosY.Text);
+            Properties.Settings.Default.ChaosY = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
         }
 
-        private void JewelersX_TextChanged(object sender, EventArgs e)
+        private void AugmentationX_TextChanged(object sender, EventArgs e)
         {
-            int Location = int.Parse(JewelersX.Text);
-            Properties.Settings.Default.JewellerX = Location;
+            int Location = int.Parse(AugmentationX.Text);
+            Properties.Settings.Default.AugmentationX = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
         }
 
-        private void JewelersY_TextChanged(object sender, EventArgs e)
+        private void AugmentationY_TextChanged(object sender, EventArgs e)
         {
-            int Location = int.Parse(JewelersY.Text);
-            Properties.Settings.Default.JewellerY = Location;
+            int Location = int.Parse(AugmentationY.Text);
+            Properties.Settings.Default.AugmentationY = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
         }
 
-        private void FusingX_TextChanged(object sender, EventArgs e)
+        private void AlterationX_TextChanged(object sender, EventArgs e)
         {
-            int Location = int.Parse(FusingX.Text);
-            Properties.Settings.Default.FusingX = Location;
+            int Location = int.Parse(AlterationX.Text);
+            Properties.Settings.Default.AlterationX = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
         }
 
-        private void FusingY_TextChanged(object sender, EventArgs e)
+        private void AlterationY_TextChanged(object sender, EventArgs e)
         {
-            int Location = int.Parse(FusingY.Text);
-            Properties.Settings.Default.FusingY = Location;
+            int Location = int.Parse(AlterationY.Text);
+            Properties.Settings.Default.AlterationY = Location;
             Properties.Settings.Default.Save();
             ProgressBar.UpdateLocations();
         }
@@ -125,13 +125,13 @@ namespace WindowsFormsApplication3
         }
         private void Form2_MouseMove(object sender, MouseEventArgs e)
         {
-            ChromaticX.Text = e.X.ToString();
-            ChromaticY.Text = e.Y.ToString();
+            ChaosX.Text = e.X.ToString();
+            ChaosY.Text = e.Y.ToString();
         }
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            FusingX.Text = e.X.ToString();
-            FusingY.Text = e.Y.ToString();
+            AlterationX.Text = e.X.ToString();
+            AlterationY.Text = e.Y.ToString();
         }
 
         private void label5_Click(object sender, EventArgs e)

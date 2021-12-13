@@ -2,11 +2,11 @@
 
 namespace WindowsFormsApplication3
 {
-    partial class Form3
+    partial class LocationForm
     {
         /// <summary>
         /// Required designer variable.
-        /// </summary>
+        /// </summary> 
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
@@ -38,18 +38,18 @@ namespace WindowsFormsApplication3
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.ChromaticY = new System.Windows.Forms.TextBox();
-            this.ChromaticX = new System.Windows.Forms.TextBox();
+            this.ChaosY = new System.Windows.Forms.TextBox();
+            this.ChaosX = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.JewelersY = new System.Windows.Forms.TextBox();
-            this.JewelersX = new System.Windows.Forms.TextBox();
+            this.AugmentationY = new System.Windows.Forms.TextBox();
+            this.AugmentationX = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.FusingY = new System.Windows.Forms.TextBox();
-            this.FusingX = new System.Windows.Forms.TextBox();
+            this.AlterationY = new System.Windows.Forms.TextBox();
+            this.AlterationX = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // CraftMatX
@@ -129,26 +129,26 @@ namespace WindowsFormsApplication3
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(520, 33);
             this.label6.TabIndex = 4;
-            this.label6.Text = "Chromatic Location";
+            this.label6.Text = "Chaos Location";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ChromaticY
+            // ChaosY
             // 
-            this.ChromaticY.Location = new System.Drawing.Point(323, 114);
-            this.ChromaticY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ChromaticY.Name = "ChromaticY";
-            this.ChromaticY.Size = new System.Drawing.Size(116, 23);
-            this.ChromaticY.TabIndex = 6;
-            this.ChromaticY.TextChanged += new System.EventHandler(this.ChromaticY_TextChanged);
+            this.ChaosY.Location = new System.Drawing.Point(323, 114);
+            this.ChaosY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.ChaosY.Name = "ChaosY";
+            this.ChaosY.Size = new System.Drawing.Size(116, 23);
+            this.ChaosY.TabIndex = 6;
+            this.ChaosY.TextChanged += new System.EventHandler(this.ChaosY_TextChanged);
             // 
-            // ChromaticX
+            // ChaosX
             // 
-            this.ChromaticX.Location = new System.Drawing.Point(107, 114);
-            this.ChromaticX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.ChromaticX.Name = "ChromaticX";
-            this.ChromaticX.Size = new System.Drawing.Size(116, 23);
-            this.ChromaticX.TabIndex = 5;
-            this.ChromaticX.TextChanged += new System.EventHandler(this.ChromaticX_TextChanged);
+            this.ChaosX.Location = new System.Drawing.Point(107, 114);
+            this.ChaosX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.ChaosX.Name = "ChaosX";
+            this.ChaosX.Size = new System.Drawing.Size(116, 23);
+            this.ChaosX.TabIndex = 5;
+            this.ChaosX.TextChanged += new System.EventHandler(this.ChaosX_TextChanged);
             // 
             // label7
             // 
@@ -170,33 +170,23 @@ namespace WindowsFormsApplication3
             this.label8.TabIndex = 12;
             this.label8.Text = "X:";
             // 
-            // label9
+            // AugmentationY
             // 
-            this.label9.Location = new System.Drawing.Point(0, 149);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(520, 33);
-            this.label9.TabIndex = 9;
-            this.label9.Text = "Jewelers Location";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.AugmentationY.Location = new System.Drawing.Point(322, 186);
+            this.AugmentationY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.AugmentationY.Name = "AugmentationY";
+            this.AugmentationY.Size = new System.Drawing.Size(116, 23);
+            this.AugmentationY.TabIndex = 11;
+            this.AugmentationY.TextChanged += new System.EventHandler(this.AugmentationY_TextChanged);
             // 
-            // JewelersY
+            // AugmentationX
             // 
-            this.JewelersY.Location = new System.Drawing.Point(322, 186);
-            this.JewelersY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.JewelersY.Name = "JewelersY";
-            this.JewelersY.Size = new System.Drawing.Size(116, 23);
-            this.JewelersY.TabIndex = 11;
-            this.JewelersY.TextChanged += new System.EventHandler(this.JewelersY_TextChanged);
-            // 
-            // JewelersX
-            // 
-            this.JewelersX.Location = new System.Drawing.Point(106, 186);
-            this.JewelersX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.JewelersX.Name = "JewelersX";
-            this.JewelersX.Size = new System.Drawing.Size(116, 23);
-            this.JewelersX.TabIndex = 10;
-            this.JewelersX.TextChanged += new System.EventHandler(this.JewelersX_TextChanged);
+            this.AugmentationX.Location = new System.Drawing.Point(106, 186);
+            this.AugmentationX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.AugmentationX.Name = "AugmentationX";
+            this.AugmentationX.Size = new System.Drawing.Size(116, 23);
+            this.AugmentationX.TabIndex = 10;
+            this.AugmentationX.TextChanged += new System.EventHandler(this.AugmentationX_TextChanged);
             // 
             // label10
             // 
@@ -226,26 +216,26 @@ namespace WindowsFormsApplication3
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(520, 33);
             this.label12.TabIndex = 14;
-            this.label12.Text = "Fusing Location";
+            this.label12.Text = "Augmentation Location";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // FusingY
+            // AlterationY
             // 
-            this.FusingY.Location = new System.Drawing.Point(322, 255);
-            this.FusingY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.FusingY.Name = "FusingY";
-            this.FusingY.Size = new System.Drawing.Size(116, 23);
-            this.FusingY.TabIndex = 16;
-            this.FusingY.TextChanged += new System.EventHandler(this.FusingY_TextChanged);
+            this.AlterationY.Location = new System.Drawing.Point(322, 255);
+            this.AlterationY.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.AlterationY.Name = "AlterationY";
+            this.AlterationY.Size = new System.Drawing.Size(116, 23);
+            this.AlterationY.TabIndex = 16;
+            this.AlterationY.TextChanged += new System.EventHandler(this.AlterationY_TextChanged);
             // 
-            // FusingX
+            // AlterationX
             // 
-            this.FusingX.Location = new System.Drawing.Point(106, 255);
-            this.FusingX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.FusingX.Name = "FusingX";
-            this.FusingX.Size = new System.Drawing.Size(116, 23);
-            this.FusingX.TabIndex = 15;
-            this.FusingX.TextChanged += new System.EventHandler(this.FusingX_TextChanged);
+            this.AlterationX.Location = new System.Drawing.Point(106, 255);
+            this.AlterationX.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.AlterationX.Name = "AlterationX";
+            this.AlterationX.Size = new System.Drawing.Size(116, 23);
+            this.AlterationX.TabIndex = 15;
+            this.AlterationX.TextChanged += new System.EventHandler(this.AlterationX_TextChanged);
             // 
             // Form3
             // 
@@ -255,18 +245,18 @@ namespace WindowsFormsApplication3
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.FusingY);
-            this.Controls.Add(this.FusingX);
+            this.Controls.Add(this.AlterationY);
+            this.Controls.Add(this.AlterationX);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.JewelersY);
-            this.Controls.Add(this.JewelersX);
+            this.Controls.Add(this.AugmentationY);
+            this.Controls.Add(this.AugmentationX);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.ChromaticY);
-            this.Controls.Add(this.ChromaticX);
+            this.Controls.Add(this.ChaosY);
+            this.Controls.Add(this.ChaosX);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -291,17 +281,17 @@ namespace WindowsFormsApplication3
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox ChromaticY;
-        private System.Windows.Forms.TextBox ChromaticX;
+        private System.Windows.Forms.TextBox ChaosY;
+        private System.Windows.Forms.TextBox ChaosX;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox JewelersY;
-        private System.Windows.Forms.TextBox JewelersX;
+        private System.Windows.Forms.TextBox AugmentationY;
+        private System.Windows.Forms.TextBox AugmentationX;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox FusingY;
-        private System.Windows.Forms.TextBox FusingX;
+        private System.Windows.Forms.TextBox AlterationY;
+        private System.Windows.Forms.TextBox AlterationX;
     }
 }

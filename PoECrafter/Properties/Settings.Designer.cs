@@ -74,72 +74,72 @@ namespace WindowsFormsApplication3.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("141")]
-        public int FusingX {
+        public int AlterationX {
             get {
-                return ((int)(this["FusingX"]));
+                return ((int)(this["AlterationX"]));
             }
             set {
-                this["FusingX"] = value;
+                this["AlterationX"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("557")]
-        public int FusingY {
+        public int AlterationY {
             get {
-                return ((int)(this["FusingY"]));
+                return ((int)(this["AlterationY"]));
             }
             set {
-                this["FusingY"] = value;
+                this["AlterationY"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("210")]
-        public int ChromaticX {
+        public int ChaosX {
             get {
-                return ((int)(this["ChromaticX"]));
+                return ((int)(this["ChaosX"]));
             }
             set {
-                this["ChromaticX"] = value;
+                this["ChaosX"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("558")]
-        public int ChromaticY {
+        public int ChaosY {
             get {
-                return ((int)(this["ChromaticY"]));
+                return ((int)(this["ChaosY"]));
             }
             set {
-                this["ChromaticY"] = value;
+                this["ChaosY"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("73")]
-        public int JewellerX {
+        public int AugmentationX {
             get {
-                return ((int)(this["JewellerX"]));
+                return ((int)(this["AugmentationX"]));
             }
             set {
-                this["JewellerX"] = value;
+                this["AugmentationX"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("556")]
-        public int JewellerY {
+        public int AugmentationY {
             get {
-                return ((int)(this["JewellerY"]));
+                return ((int)(this["AugmentationY"]));
             }
             set {
-                this["JewellerY"] = value;
+                this["AugmentationY"] = value;
             }
         }
         
