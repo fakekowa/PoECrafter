@@ -161,5 +161,83 @@ namespace WindowsFormsApplication3
             m_GlobalHook.MouseMove += Form1_MouseMove;
             m_GlobalHook.OnCombination(dic);
         }
+
+        private void btnSelectCraftMat_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            button.Text = "Move mouse to item location, then press ESC";
+            button.BackColor = Color.Yellow;
+            
+            m_GlobalHook = Hook.GlobalEvents();
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                button.Text = "Select";
+                button.BackColor = Color.White;
+                unhook();
+            });
+            m_GlobalHook.MouseMove += Form3_MouseMove;
+            m_GlobalHook.OnCombination(dic);
+        }
+
+        private void btnSelectChaos_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            button.Text = "Move mouse to Chaos orb, then press ESC";
+            button.BackColor = Color.Yellow;
+            
+            m_GlobalHook = Hook.GlobalEvents();
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                button.Text = "Select";
+                button.BackColor = Color.White;
+                unhook();
+            });
+            m_GlobalHook.MouseMove += Form2_MouseMove;
+            m_GlobalHook.OnCombination(dic);
+        }
+
+        private void btnSelectAugmentation_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            button.Text = "Move mouse to Augmentation orb, then press ESC";
+            button.BackColor = Color.Yellow;
+            
+            m_GlobalHook = Hook.GlobalEvents();
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                button.Text = "Select";
+                button.BackColor = Color.White;
+                unhook();
+            });
+            m_GlobalHook.MouseMove += FormAugmentation_MouseMove;
+            m_GlobalHook.OnCombination(dic);
+        }
+
+        private void btnSelectAlteration_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            button.Text = "Move mouse to Alteration orb, then press ESC";
+            button.BackColor = Color.Yellow;
+            
+            m_GlobalHook = Hook.GlobalEvents();
+            var dic = new Dictionary<Combination, Action>();
+            dic.Add(Combination.TriggeredBy(Keys.Escape), () =>
+            {
+                button.Text = "Select";
+                button.BackColor = Color.White;
+                unhook();
+            });
+            m_GlobalHook.MouseMove += Form1_MouseMove;
+            m_GlobalHook.OnCombination(dic);
+        }
+
+        private void FormAugmentation_MouseMove(object sender, MouseEventArgs e)
+        {
+            AugmentationX.Text = e.X.ToString();
+            AugmentationY.Text = e.Y.ToString();
+        }
     }
 }

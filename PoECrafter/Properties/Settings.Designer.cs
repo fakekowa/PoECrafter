@@ -145,7 +145,7 @@ namespace WindowsFormsApplication3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int AddedDelay {
             get {
                 return ((int)(this["AddedDelay"]));
@@ -164,6 +164,126 @@ namespace WindowsFormsApplication3.Properties {
             }
             set {
                 this["ShiftClickFix"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseORLogic {
+            get {
+                return ((bool)(this["UseORLogic"]));
+            }
+            set {
+                this["UseORLogic"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SmartAugmentation {
+            get {
+                return ((bool)(this["SmartAugmentation"]));
+            }
+            set {
+                this["SmartAugmentation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("F12")]
+        public string EmergencyStopKey {
+            get {
+                return ((string)(this["EmergencyStopKey"]));
+            }
+            set {
+                this["EmergencyStopKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CraftingModeIndex {
+            get {
+                return ((int)(this["CraftingModeIndex"]));
+            }
+            set {
+                this["CraftingModeIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedModifiers {
+            get {
+                return ((string)(this["SelectedModifiers"]));
+            }
+            set {
+                this["SelectedModifiers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public string WindowState {
+            get {
+                return ((string)(this["WindowState"]));
+            }
+            set {
+                this["WindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("800, 600")]
+        public global::System.Drawing.Size WindowSize {
+            get {
+                return ((global::System.Drawing.Size)(this["WindowSize"]));
+            }
+            set {
+                this["WindowSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ItemLocationX {
+            get {
+                return ((int)(this["ItemLocationX"]));
+            }
+            set {
+                this["ItemLocationX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ItemLocationY {
+            get {
+                return ((int)(this["ItemLocationY"]));
+            }
+            set {
+                this["ItemLocationY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int MaxChaosToUse {
+            get {
+                return ((int)(this["MaxChaosToUse"]));
+            }
+            set {
+                this["MaxChaosToUse"] = value;
             }
         }
     }

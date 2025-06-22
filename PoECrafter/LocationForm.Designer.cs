@@ -50,6 +50,10 @@ namespace WindowsFormsApplication3
             this.label12 = new System.Windows.Forms.Label();
             this.AlterationY = new System.Windows.Forms.TextBox();
             this.AlterationX = new System.Windows.Forms.TextBox();
+            this.btnSelectCraftMat = new System.Windows.Forms.Button();
+            this.btnSelectChaos = new System.Windows.Forms.Button();
+            this.btnSelectAugmentation = new System.Windows.Forms.Button();
+            this.btnSelectAlteration = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CraftMatX
@@ -188,6 +192,16 @@ namespace WindowsFormsApplication3
             this.AugmentationX.TabIndex = 10;
             this.AugmentationX.TextChanged += new System.EventHandler(this.AugmentationX_TextChanged);
             // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(0, 147);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(520, 33);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "Augmentation Location";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -216,7 +230,7 @@ namespace WindowsFormsApplication3
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(520, 33);
             this.label12.TabIndex = 14;
-            this.label12.Text = "Augmentation Location";
+            this.label12.Text = "Alteration Location";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AlterationY
@@ -237,11 +251,55 @@ namespace WindowsFormsApplication3
             this.AlterationX.TabIndex = 15;
             this.AlterationX.TextChanged += new System.EventHandler(this.AlterationX_TextChanged);
             // 
+            // btnSelectCraftMat
+            // 
+            this.btnSelectCraftMat.Location = new System.Drawing.Point(450, 39);
+            this.btnSelectCraftMat.Name = "btnSelectCraftMat";
+            this.btnSelectCraftMat.Size = new System.Drawing.Size(65, 23);
+            this.btnSelectCraftMat.TabIndex = 19;
+            this.btnSelectCraftMat.Text = "Select";
+            this.btnSelectCraftMat.UseVisualStyleBackColor = true;
+            this.btnSelectCraftMat.Click += new System.EventHandler(this.btnSelectCraftMat_Click);
+            // 
+            // btnSelectChaos
+            // 
+            this.btnSelectChaos.Location = new System.Drawing.Point(450, 114);
+            this.btnSelectChaos.Name = "btnSelectChaos";
+            this.btnSelectChaos.Size = new System.Drawing.Size(65, 23);
+            this.btnSelectChaos.TabIndex = 20;
+            this.btnSelectChaos.Text = "Select";
+            this.btnSelectChaos.UseVisualStyleBackColor = true;
+            this.btnSelectChaos.Click += new System.EventHandler(this.btnSelectChaos_Click);
+            // 
+            // btnSelectAugmentation
+            // 
+            this.btnSelectAugmentation.Location = new System.Drawing.Point(450, 186);
+            this.btnSelectAugmentation.Name = "btnSelectAugmentation";
+            this.btnSelectAugmentation.Size = new System.Drawing.Size(65, 23);
+            this.btnSelectAugmentation.TabIndex = 21;
+            this.btnSelectAugmentation.Text = "Select";
+            this.btnSelectAugmentation.UseVisualStyleBackColor = true;
+            this.btnSelectAugmentation.Click += new System.EventHandler(this.btnSelectAugmentation_Click);
+            // 
+            // btnSelectAlteration
+            // 
+            this.btnSelectAlteration.Location = new System.Drawing.Point(450, 255);
+            this.btnSelectAlteration.Name = "btnSelectAlteration";
+            this.btnSelectAlteration.Size = new System.Drawing.Size(65, 23);
+            this.btnSelectAlteration.TabIndex = 22;
+            this.btnSelectAlteration.Text = "Select";
+            this.btnSelectAlteration.UseVisualStyleBackColor = true;
+            this.btnSelectAlteration.Click += new System.EventHandler(this.btnSelectAlteration_Click);
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(522, 302);
+            this.ClientSize = new System.Drawing.Size(530, 302);
+            this.Controls.Add(this.btnSelectAlteration);
+            this.Controls.Add(this.btnSelectAugmentation);
+            this.Controls.Add(this.btnSelectChaos);
+            this.Controls.Add(this.btnSelectCraftMat);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label12);
@@ -293,5 +351,9 @@ namespace WindowsFormsApplication3
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox AlterationY;
         private System.Windows.Forms.TextBox AlterationX;
+        private System.Windows.Forms.Button btnSelectCraftMat;
+        private System.Windows.Forms.Button btnSelectChaos;
+        private System.Windows.Forms.Button btnSelectAugmentation;
+        private System.Windows.Forms.Button btnSelectAlteration;
     }
 }
