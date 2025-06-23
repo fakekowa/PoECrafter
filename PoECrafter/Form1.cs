@@ -263,6 +263,25 @@ namespace WindowsFormsApplication3
                 print($"🎯 Crafting Mode: {(chkUseORLogic.Checked ? "OR Logic (Any Match)" : "AND Logic (All Must Match)")}", Color.Purple);
                 print($"💡 Strategy: {(chkSmartAugmentation.Checked ? "Smart Augmentation" : "Alt-Spam Only")}", Color.Purple);
 
+                // **NEW: Check if the starting item already meets the requirements**
+                print("🔍 Checking if starting item already meets requirements...", Color.Cyan);
+                AnalyzeCurrentItem();
+                
+                if (CheckSelectedModifiersAdvanced())
+                {
+                    print("🎉 STARTING ITEM ALREADY PERFECT!", Color.LimeGreen);
+                    print("✅ The current item already satisfies all selected modifiers!", Color.LimeGreen);
+                    print("💡 No crafting needed - item is ready to use!", Color.LimeGreen);
+                    print("--------------------------------------", Color.Gray);
+                    print("CONGRATULATIONS!", Color.LimeGreen);
+                    print("--------------------------------------", Color.Gray);
+                    return; // Exit crafting - no work needed!
+                }
+                else
+                {
+                    print("⚡ Starting item doesn't meet requirements, beginning crafting...", Color.Yellow);
+                }
+
                 while (!ruleMatch && Roll < ChaosToUse.Value && !isEmergencyStopActive)
                     {
                         // Check for emergency stop
@@ -1661,15 +1680,30 @@ namespace WindowsFormsApplication3
             
             if (selectedModifier.Contains("Physical Damage %"))
             {
-                // **NEW: Check if item has both Physical Damage % AND Accuracy Rating**
+                // **FIXED: Only treat as hybrid if the item NAME indicates it's actually a hybrid**
+                // Check if this is actually a hybrid modifier by examining the item name
+                bool isActualHybrid = false;
                 bool hasPhysDamage = System.Text.RegularExpressions.Regex.IsMatch(itemText, @"\d+% increased Physical Damage");
                 bool hasAccuracy = System.Text.RegularExpressions.Regex.IsMatch(itemText, @"\+\d+ to Accuracy Rating");
                 
                 if (hasPhysDamage && hasAccuracy)
                 {
-                    print("🔍 Detected both Physical Damage % and Accuracy - this is a Hybrid Physical/Accuracy modifier!", Color.Cyan);
-                    print("⚠️ Skipping individual Physical Damage % check (use Hybrid Phys/Acc selection instead)", Color.Orange);
-                    return false; // Don't treat as individual Physical Damage %
+                    // Extract item name to check for hybrid prefixes
+                    var (prefixName, suffixName) = MagicItemNameDatabase.ExtractPrefixSuffixNames(itemText);
+                    var hybridPrefixes = new[] { "Squire's", "Journeyman's", "Reaver's", "Mercenary's", "Champion's", "Conqueror's", "Emperor's", "Dictator's" };
+                    
+                    if (!string.IsNullOrEmpty(prefixName) && hybridPrefixes.Contains(prefixName))
+                    {
+                        isActualHybrid = true;
+                        print($"🔍 Detected hybrid prefix '{prefixName}' - this IS a true Hybrid Physical/Accuracy modifier!", Color.Cyan);
+                        print("⚠️ Skipping individual Physical Damage % check (use Hybrid Phys/Acc selection instead)", Color.Orange);
+                        return false; // Don't treat as individual Physical Damage %
+                    }
+                    else
+                    {
+                        print($"🔍 Item has both Physical Damage % and Accuracy, but prefix '{prefixName}' is NOT hybrid", Color.Yellow);
+                        print($"   This appears to be separate prefix + suffix modifiers, not a hybrid modifier", Color.Yellow);
+                    }
                 }
                 
                 return CheckPhysicalDamagePercentFromSelection(itemText, selectedModifier);
@@ -1847,12 +1881,25 @@ namespace WindowsFormsApplication3
                 return false;
             }
             
+            // **CRITICAL FIX: Only treat as hybrid if the item NAME indicates it's actually a hybrid**
+            // Check if this is actually a hybrid modifier by examining the item name
+            var (prefixName, suffixName) = MagicItemNameDatabase.ExtractPrefixSuffixNames(itemText);
+            var hybridPrefixes = new[] { "Squire's", "Journeyman's", "Reaver's", "Mercenary's", "Champion's", "Conqueror's", "Emperor's", "Dictator's" };
+            
+            if (string.IsNullOrEmpty(prefixName) || !hybridPrefixes.Contains(prefixName))
+            {
+                print($"❌ HYBRID CHECK FAILED: Item has both Physical Damage % and Accuracy, but prefix '{prefixName}' is NOT a hybrid prefix!", Color.Red);
+                print($"   This item has separate prefix + suffix modifiers, NOT a hybrid modifier!", Color.Red);
+                print($"   Use 'Physical Damage %' + 'Accuracy Rating' selections instead of 'Hybrid Phys/Acc'", Color.Yellow);
+                return false; // This is NOT a hybrid modifier!
+            }
+            
             int physPercent = int.Parse(physMatch.Groups[1].Value);
             int accuracy = int.Parse(accMatch.Groups[1].Value);
             int actualTier = GetHybridPhysicalAccuracyTier(physPercent, accuracy);
             int selectedTier = GetTierFromItem(selectedModifier);
             
-            print($"✅ Found Hybrid Phys/Acc: {physPercent}% + {accuracy} Acc (T{actualTier})", Color.Blue);
+            print($"✅ CONFIRMED HYBRID: Found true hybrid prefix '{prefixName}' with {physPercent}% + {accuracy} Acc (T{actualTier})", Color.Blue);
             
             // **FIXED: Check if actual tier meets or exceeds selected tier requirement**
             if (selectedTier != -1 && actualTier <= selectedTier) // Lower tier number = better tier

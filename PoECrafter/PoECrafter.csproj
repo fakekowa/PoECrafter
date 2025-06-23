@@ -3,6 +3,10 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <RootNamespace>WindowsFormsApplication3</RootNamespace>
+    <AssemblyName>CookbookNotes</AssemblyName>
+    <Product>Cookbook Notes</Product>
+    <AssemblyTitle>Cookbook Notes</AssemblyTitle>
+    <AssemblyDescription>Personal recipe and cooking notes manager</AssemblyDescription>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>

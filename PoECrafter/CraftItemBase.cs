@@ -668,7 +668,7 @@ namespace WindowsFormsApplication3
             return result;
         }
         
-        private static (string prefixName, string suffixName) ExtractPrefixSuffixNames(string itemText)
+        public static (string prefixName, string suffixName) ExtractPrefixSuffixNames(string itemText)
         {
             // Extract the item name line
             var lines = itemText.Split('\n');
