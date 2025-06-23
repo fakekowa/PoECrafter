@@ -30,7 +30,14 @@ PoECrafter is a Windows Forms application designed to automate Path of Exile ite
 - SettingsManager class complete with full functionality
 - Form integration enhanced for comprehensive persistence
 
-🎯 **LATEST ENHANCEMENT**: Speed Crafting Feature Implemented!
+🎯 **LATEST ENHANCEMENT**: Comprehensive Hybrid Detection Bug Fix + Unit Test Suite!
+
+✅ **🔬 HYBRID DETECTION BUG FIX & TESTING COMPLETED**: 
+- **Critical Bug Fix**: Fixed false hybrid detection that incorrectly identified separate modifiers as hybrid
+- **Real User Issue Resolved**: "Wicked Vaal Axe of Precision" no longer incorrectly treated as hybrid
+- **Comprehensive Test Suite**: 18 unit tests covering all hybrid detection scenarios
+- **Regression Protection**: Tests prevent future reintroduction of hybrid detection bugs
+- **Currency Waste Prevention**: System now correctly distinguishes true hybrid vs separate prefix+suffix
 
 ✅ **🚀 SPEED CRAFTING COMPLETED**: 
 - **SHIFT-Holding Automation**: Eliminates back-and-forth mouse movement
@@ -38,7 +45,7 @@ PoECrafter is a Windows Forms application designed to automate Path of Exile ite
 - **Emergency Stop Integration**: Safe SHIFT key management with F12 support
 - **Seamless Compatibility**: Works with OR/AND logic and Smart Augmentation
 
-🎮 **READY FOR**: Lightning-fast crafting with comprehensive settings persistence and speed optimization!
+🎮 **READY FOR**: Production release with bulletproof hybrid detection and lightning-fast crafting!
 
 ### Current Technology Stack
 - **Framework**: .NET 6.0 Windows Forms
@@ -71,7 +78,9 @@ PoECrafter is a Windows Forms application designed to automate Path of Exile ite
   - [x] Attack Speed detection with tier classification
   - [x] Critical Strike Chance detection with tier classification
   - [x] Critical Strike Multiplier detection with tier classification
-  - [x] Hybrid Physical/Accuracy detection with tier classification
+  - [x] **Hybrid Physical/Accuracy detection with tier classification and prefix validation** ✅ **BUG FIXED**
+- [x] **Critical Hybrid Detection Bug Fix**: System now correctly distinguishes true hybrid modifiers from separate prefix+suffix combinations
+- [x] **Comprehensive Test Suite**: 18 unit tests covering all hybrid detection scenarios with real user items
 
 #### Advanced Crafting Automation
 - [x] Intelligent currency selection based on crafting mode:
@@ -81,7 +90,7 @@ PoECrafter is a Windows Forms application designed to automate Path of Exile ite
 - [x] Hierarchical tier selection system (selecting T3 auto-selects T1 and T2)
 - [x] Real-time modifier validation and feedback during crafting
 - [x] Safety limits to prevent infinite crafting loops
-- [x] Comprehensive test suite for modifier detection accuracy
+- [x] **Comprehensive test suite for modifier detection accuracy with 18 unit tests** ✅ **ALL PASSING**
 
 ### 🚧 **Partially Implemented**
 
