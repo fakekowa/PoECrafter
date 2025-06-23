@@ -286,5 +286,413 @@ namespace WindowsFormsApplication3.Properties {
                 this["MaxChaosToUse"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LogWindowVisible {
+            get {
+                return ((bool)(this["LogWindowVisible"]));
+            }
+            set {
+                this["LogWindowVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point LogWindowLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["LogWindowLocation"]));
+            }
+            set {
+                this["LogWindowLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("400, 600")]
+        public global::System.Drawing.Size LogWindowSize {
+            get {
+                return ((global::System.Drawing.Size)(this["LogWindowSize"]));
+            }
+            set {
+                this["LogWindowSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public int SplitterDistance {
+            get {
+                return ((int)(this["SplitterDistance"]));
+            }
+            set {
+                this["SplitterDistance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MainTabSelectedIndex {
+            get {
+                return ((int)(this["MainTabSelectedIndex"]));
+            }
+            set {
+                this["MainTabSelectedIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SelectedModifiersByItemType {
+            get {
+                return ((string)(this["SelectedModifiersByItemType"]));
+            }
+            set {
+                this["SelectedModifiersByItemType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModifierRuleSets {
+            get {
+                return ((string)(this["ModifierRuleSets"]));
+            }
+            set {
+                this["ModifierRuleSets"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("TwoHandedAxes")]
+        public string CurrentItemType {
+            get {
+                return ((string)(this["CurrentItemType"]));
+            }
+            set {
+                this["CurrentItemType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastUsedRuleSet {
+            get {
+                return ((string)(this["LastUsedRuleSet"]));
+            }
+            set {
+                this["LastUsedRuleSet"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AND")]
+        public string DefaultLogicOperator {
+            get {
+                return ((string)(this["DefaultLogicOperator"]));
+            }
+            set {
+                this["DefaultLogicOperator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoSaveModifierChanges {
+            get {
+                return ((bool)(this["AutoSaveModifierChanges"]));
+            }
+            set {
+                this["AutoSaveModifierChanges"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowAdvancedModifierOptions {
+            get {
+                return ((bool)(this["ShowAdvancedModifierOptions"]));
+            }
+            set {
+                this["ShowAdvancedModifierOptions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SmartAugmentation")]
+        public string DefaultCraftingStrategy {
+            get {
+                return ((string)(this["DefaultCraftingStrategy"]));
+            }
+            set {
+                this["DefaultCraftingStrategy"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int MaxAlterationToUse {
+            get {
+                return ((int)(this["MaxAlterationToUse"]));
+            }
+            set {
+                this["MaxAlterationToUse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int MaxAugmentationToUse {
+            get {
+                return ((int)(this["MaxAugmentationToUse"]));
+            }
+            set {
+                this["MaxAugmentationToUse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoStopOnSuccess {
+            get {
+                return ((bool)(this["AutoStopOnSuccess"]));
+            }
+            set {
+                this["AutoStopOnSuccess"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PlaySoundOnSuccess {
+            get {
+                return ((bool)(this["PlaySoundOnSuccess"]));
+            }
+            set {
+                this["PlaySoundOnSuccess"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableDetailedLogging {
+            get {
+                return ((bool)(this["EnableDetailedLogging"]));
+            }
+            set {
+                this["EnableDetailedLogging"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowEmojiInLogs {
+            get {
+                return ((bool)(this["ShowEmojiInLogs"]));
+            }
+            set {
+                this["ShowEmojiInLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowRealTimeAnalysis {
+            get {
+                return ((bool)(this["ShowRealTimeAnalysis"]));
+            }
+            set {
+                this["ShowRealTimeAnalysis"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public string LoggingVerbosity {
+            get {
+                return ((string)(this["LoggingVerbosity"]));
+            }
+            set {
+                this["LoggingVerbosity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoClearLogs {
+            get {
+                return ((bool)(this["AutoClearLogs"]));
+            }
+            set {
+                this["AutoClearLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int MaxLogEntries {
+            get {
+                return ((int)(this["MaxLogEntries"]));
+            }
+            set {
+                this["MaxLogEntries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RememberWindowPositions {
+            get {
+                return ((bool)(this["RememberWindowPositions"]));
+            }
+            set {
+                this["RememberWindowPositions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoRestoreSession {
+            get {
+                return ((bool)(this["AutoRestoreSession"]));
+            }
+            set {
+                this["AutoRestoreSession"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastCraftingSession {
+            get {
+                return ((string)(this["LastCraftingSession"]));
+            }
+            set {
+                this["LastCraftingSession"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SessionStatistics {
+            get {
+                return ((string)(this["SessionStatistics"]));
+            }
+            set {
+                this["SessionStatistics"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableEmergencyStop {
+            get {
+                return ((bool)(this["EnableEmergencyStop"]));
+            }
+            set {
+                this["EnableEmergencyStop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EmergencyStopSound {
+            get {
+                return ((bool)(this["EmergencyStopSound"]));
+            }
+            set {
+                this["EmergencyStopSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int SafetyDelayMS {
+            get {
+                return ((int)(this["SafetyDelayMS"]));
+            }
+            set {
+                this["SafetyDelayMS"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int MaxCraftingIterations {
+            get {
+                return ((int)(this["MaxCraftingIterations"]));
+            }
+            set {
+                this["MaxCraftingIterations"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AnimationsEnabled {
+            get {
+                return ((bool)(this["AnimationsEnabled"]));
+            }
+            set {
+                this["AnimationsEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoResizeColumns {
+            get {
+                return ((bool)(this["AutoResizeColumns"]));
+            }
+            set {
+                this["AutoResizeColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HighlightActiveModifiers {
+            get {
+                return ((bool)(this["HighlightActiveModifiers"]));
+            }
+            set {
+                this["HighlightActiveModifiers"] = value;
+            }
+        }
     }
 }

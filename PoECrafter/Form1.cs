@@ -468,23 +468,48 @@ namespace WindowsFormsApplication3
         // Save/Load Window Location
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // **ENHANCED: Comprehensive Settings Saving**
+            // **ENHANCED: Comprehensive Settings Saving with Priority 2 SettingsManager**
             try
             {
-                // Save window state and position
+                // **NEW: Save comprehensive crafting configuration**
+                var craftingConfig = new CraftingConfigData
+                {
+                    UseORLogic = chkUseORLogic.Checked,
+                    SmartAugmentation = chkSmartAugmentation.Checked,
+                    DefaultStrategy = Properties.Settings.Default.DefaultCraftingStrategy,
+                    MaxChaosToUse = (int)ChaosToUse.Value,
+                    MaxAlterationToUse = Properties.Settings.Default.MaxAlterationToUse,
+                    MaxAugmentationToUse = Properties.Settings.Default.MaxAugmentationToUse,
+                    AutoStopOnSuccess = Properties.Settings.Default.AutoStopOnSuccess,
+                    PlaySoundOnSuccess = Properties.Settings.Default.PlaySoundOnSuccess,
+                    SafetyDelayMS = Properties.Settings.Default.SafetyDelayMS,
+                    MaxCraftingIterations = Properties.Settings.Default.MaxCraftingIterations
+                };
+                SettingsManager.SaveCraftingConfiguration(craftingConfig);
+                
+                // **NEW: Save comprehensive window state**
+                SettingsManager.SaveWindowState(this, logWindow);
+                
+                // **NEW: Save final crafting session data**
+                var sessionData = new CraftingSessionData
+                {
+                    SessionStart = DateTime.Now, // Will be overwritten if session tracking is implemented
+                    LastItemType = Properties.Settings.Default.CurrentItemType ?? "TwoHandedAxes",
+                    LastRuleSet = Properties.Settings.Default.LastUsedRuleSet ?? "",
+                    TotalCurrencyUsed = 0, // Would be tracked during crafting
+                    SuccessfulCrafts = 0,  // Would be tracked during crafting
+                    CraftingLog = new List<string>() // Could include recent log entries
+                };
+                SettingsManager.SaveCraftingSession(sessionData);
+                
+                // **LEGACY: Save basic settings for backward compatibility**
                 Properties.Settings.Default.WindowLocation = this.Location;
                 Properties.Settings.Default.WindowSize = this.Size;
-                
-                // Save UI settings
                 Properties.Settings.Default.AlwaysOnTop = this.TopMost;
                 Properties.Settings.Default.AddedDelay = trackBar1.Value;
-                
-                // **NEW: Save Advanced Logic Settings**
                 Properties.Settings.Default.UseORLogic = chkUseORLogic.Checked;
                 Properties.Settings.Default.SmartAugmentation = chkSmartAugmentation.Checked;
                 Properties.Settings.Default.EmergencyStopKey = txtEmergencyHotkey.Text;
-                
-                // **NEW: Save Crafting Configuration**
                 Properties.Settings.Default.CraftingModeIndex = cmbCraftingMode.SelectedIndex;
                 Properties.Settings.Default.SelectedModifiers = SaveSelectedModifiers();
                 Properties.Settings.Default.MaxChaosToUse = (int)ChaosToUse.Value;
@@ -492,7 +517,11 @@ namespace WindowsFormsApplication3
                 // Save all settings
                 Properties.Settings.Default.Save();
                 
-                print("💾 All settings saved successfully!", Color.Green);
+                print("💾 Comprehensive settings saved successfully with Priority 2 enhancements!", Color.Green);
+                print($"   📝 Modifier selections by item type saved", Color.Blue);
+                print($"   🎯 Advanced logic preferences saved", Color.Blue);
+                print($"   🪟 Window state and positions saved", Color.Blue);
+                print($"   📊 Session data recorded", Color.Blue);
             }
             catch (Exception ex)
             {
@@ -509,13 +538,36 @@ namespace WindowsFormsApplication3
             try
             {
                 var selectedIndices = new List<int>();
+                var selectedModifierNames = new List<string>();
+                
                 for (int i = 0; i < clbModifiers.Items.Count; i++)
                 {
                     if (clbModifiers.GetItemChecked(i))
                     {
                         selectedIndices.Add(i);
+                        selectedModifierNames.Add(clbModifiers.Items[i].ToString());
                     }
                 }
+                
+                // **ENHANCED: Use new SettingsManager for comprehensive persistence**
+                string currentItemType = Properties.Settings.Default.CurrentItemType ?? "TwoHandedAxes";
+                SettingsManager.SaveModifierSelectionsByItemType(currentItemType, selectedModifierNames);
+                
+                // **NEW: Auto-save as rule set if enabled**
+                if (Properties.Settings.Default.AutoSaveModifierChanges && selectedModifierNames.Count > 0)
+                {
+                    var ruleSet = new ModifierRuleSet
+                    {
+                        Name = $"Auto-Save {DateTime.Now:yyyy-MM-dd HH:mm}",
+                        ItemType = currentItemType,
+                        SelectedModifiers = selectedModifierNames,
+                        UseORLogic = chkUseORLogic.Checked,
+                        SmartAugmentation = chkSmartAugmentation.Checked,
+                        Description = "Automatically saved rule set"
+                    };
+                    SettingsManager.SaveModifierRuleSet(ruleSet.Name, ruleSet);
+                }
+                
                 return string.Join(",", selectedIndices);
             }
             catch (Exception ex)
@@ -529,6 +581,26 @@ namespace WindowsFormsApplication3
         {
             try
             {
+                // **ENHANCED: Try loading from new system first**
+                string currentItemType = Properties.Settings.Default.CurrentItemType ?? "TwoHandedAxes";
+                var savedModifierNames = SettingsManager.GetModifierSelectionsForItemType(currentItemType);
+                
+                if (savedModifierNames.Count > 0)
+                {
+                    // Load by modifier names (more reliable)
+                    for (int i = 0; i < clbModifiers.Items.Count; i++)
+                    {
+                        string itemText = clbModifiers.Items[i].ToString();
+                        if (savedModifierNames.Contains(itemText))
+                        {
+                            clbModifiers.SetItemChecked(i, true);
+                        }
+                    }
+                    print($"✅ Loaded {savedModifierNames.Count} saved modifier selections for {currentItemType}", Color.Green);
+                    return;
+                }
+                
+                // **FALLBACK: Use old index-based system for backward compatibility**
                 if (string.IsNullOrEmpty(savedModifiers)) return;
 
                 var indices = savedModifiers.Split(',');
@@ -543,7 +615,7 @@ namespace WindowsFormsApplication3
                     }
                 }
                 
-                print($"✅ Loaded {indices.Length} saved modifier selections", Color.Green);
+                print($"✅ Loaded {indices.Length} saved modifier selections (legacy format)", Color.Orange);
             }
             catch (Exception ex)
             {
@@ -556,6 +628,25 @@ namespace WindowsFormsApplication3
         {
             try
             {
+                // **NEW: Save comprehensive crafting configuration**
+                var craftingConfig = new CraftingConfigData
+                {
+                    UseORLogic = chkUseORLogic.Checked,
+                    SmartAugmentation = chkSmartAugmentation.Checked,
+                    DefaultStrategy = Properties.Settings.Default.DefaultCraftingStrategy,
+                    MaxChaosToUse = (int)ChaosToUse.Value,
+                    MaxAlterationToUse = Properties.Settings.Default.MaxAlterationToUse,
+                    MaxAugmentationToUse = Properties.Settings.Default.MaxAugmentationToUse,
+                    AutoStopOnSuccess = Properties.Settings.Default.AutoStopOnSuccess,
+                    PlaySoundOnSuccess = Properties.Settings.Default.PlaySoundOnSuccess,
+                    SafetyDelayMS = Properties.Settings.Default.SafetyDelayMS,
+                    MaxCraftingIterations = Properties.Settings.Default.MaxCraftingIterations
+                };
+                SettingsManager.SaveCraftingConfiguration(craftingConfig);
+                
+                // **NEW: Save window state**
+                SettingsManager.SaveWindowState(this, logWindow);
+                
                 Properties.Settings.Default.Save();
             }
             catch (Exception ex)
@@ -1655,32 +1746,37 @@ namespace WindowsFormsApplication3
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // **ENHANCED: Comprehensive Settings Loading**
+            // **ENHANCED: Comprehensive Settings Loading with Priority 2 SettingsManager**
             try
             {
-                // **FIXED: Window positioning with bounds checking**
-                var savedLocation = Properties.Settings.Default.WindowLocation;
+                // **NEW: Load comprehensive crafting configuration first**
+                var craftingConfig = SettingsManager.LoadCraftingConfiguration();
+                chkUseORLogic.Checked = craftingConfig.UseORLogic;
+                chkSmartAugmentation.Checked = craftingConfig.SmartAugmentation;
+                ChaosToUse.Value = craftingConfig.MaxChaosToUse;
                 
-                // Check if saved location is valid and on screen
-                if (savedLocation != null && 
-                    savedLocation.X >= -100 && savedLocation.Y >= -100 && // Allow some off-screen but recoverable
-                    savedLocation.X < Screen.PrimaryScreen.WorkingArea.Width &&
-                    savedLocation.Y < Screen.PrimaryScreen.WorkingArea.Height)
+                // **NEW: Initialize separate log window**
+                logWindow = new LogWindow();
+                logWindow.Text = "PoECrafter - Crafting Logs";
+                
+                // **ENHANCED: Use comprehensive window state restoration**
+                SettingsManager.RestoreWindowState(this, logWindow);
+                
+                // **FALLBACK: Manual window restoration if SettingsManager didn't handle it**
+                if (!Properties.Settings.Default.RememberWindowPositions)
                 {
-                    this.Location = savedLocation;
-                }
-                else
-                {
-                    // Center the window if saved position is invalid
-                    this.StartPosition = FormStartPosition.CenterScreen;
-                    print("⚠️ Window centered due to invalid saved position", Color.Orange);
-                }
-
-                // **ENHANCED: Load window state and size**
-                var savedSize = Properties.Settings.Default.WindowSize;
-                if (savedSize.Width > 400 && savedSize.Height > 300) // Minimum reasonable size
-                {
-                    this.Size = savedSize;
+                    var savedLocation = Properties.Settings.Default.WindowLocation;
+                    if (savedLocation.X >= -100 && savedLocation.Y >= -100 && 
+                        savedLocation.X < Screen.PrimaryScreen.WorkingArea.Width &&
+                        savedLocation.Y < Screen.PrimaryScreen.WorkingArea.Height)
+                    {
+                        this.Location = savedLocation;
+                    }
+                    else
+                    {
+                        this.StartPosition = FormStartPosition.CenterScreen;
+                        print("⚠️ Window centered due to invalid saved position", Color.Orange);
+                    }
                 }
 
                 // **ENHANCED: Load UI settings**
@@ -1690,26 +1786,19 @@ namespace WindowsFormsApplication3
                 int savedDelay = Properties.Settings.Default.AddedDelay;
                 if (savedDelay < trackBar1.Minimum || savedDelay > trackBar1.Maximum)
                 {
-                    // Use default value if saved value is out of range
                     savedDelay = 50; // Default delay value
                     Properties.Settings.Default.AddedDelay = savedDelay;
                     Properties.Settings.Default.Save();
                     print($"Reset delay to default ({savedDelay}ms) - saved value was invalid", Color.Orange);
                 }
-                
                 DelayNumber.Text = savedDelay.ToString();
                 trackBar1.Value = savedDelay;
 
-                // **NEW: Load Advanced Logic Settings**
-                chkUseORLogic.Checked = Properties.Settings.Default.UseORLogic;
-                chkSmartAugmentation.Checked = Properties.Settings.Default.SmartAugmentation;
-                
                 // **NEW: Load Emergency Stop Key**
                 string savedKey = Properties.Settings.Default.EmergencyStopKey;
                 if (!string.IsNullOrEmpty(savedKey))
                 {
                     txtEmergencyHotkey.Text = savedKey;
-                    // Parse and set the emergency stop key
                     if (Enum.TryParse<Keys>(savedKey, out Keys parsedKey))
                     {
                         emergencyStopKey = parsedKey;
@@ -1723,19 +1812,9 @@ namespace WindowsFormsApplication3
                     cmbCraftingMode.SelectedIndex = savedCraftingMode;
                 }
 
-                // **NEW: Load Selected Modifiers**
+                // **ENHANCED: Load Selected Modifiers using new system**
                 string savedModifiers = Properties.Settings.Default.SelectedModifiers;
-                if (!string.IsNullOrEmpty(savedModifiers))
-                {
-                    LoadSelectedModifiers(savedModifiers);
-                }
-
-                // **NEW: Load Currency Limits**
-                int savedMaxChaos = Properties.Settings.Default.MaxChaosToUse;
-                if (savedMaxChaos > 0)
-                {
-                    ChaosToUse.Value = savedMaxChaos;
-                }
+                LoadSelectedModifiers(savedModifiers);
 
                 // **ENHANCED: Initialize advanced systems**
                 InitializeCraftingConfiguration();
@@ -1743,11 +1822,12 @@ namespace WindowsFormsApplication3
                 GenerateGetProcessors();
                 UpdateLocations();
 
-                // **NEW: Initialize separate log window**
-                logWindow = new LogWindow();
-                logWindow.Text = "PoECrafter - Crafting Logs";
-                // Position it to the right of main window
-                logWindow.Location = new Point(this.Location.X + this.Width + 10, this.Location.Y);
+                // **NEW: Load crafting session data**
+                var lastSession = SettingsManager.LoadCraftingSession();
+                if (!string.IsNullOrEmpty(lastSession.LastItemType))
+                {
+                    Properties.Settings.Default.CurrentItemType = lastSession.LastItemType;
+                }
 
                 // Force window visibility
                 this.WindowState = FormWindowState.Normal;
@@ -1755,14 +1835,22 @@ namespace WindowsFormsApplication3
                 this.BringToFront();
                 this.Activate();
 
-                // **ENHANCED: Welcome message with feature summary**
-                print("🚀 PoECrafter Advanced Version Loaded Successfully!", Color.Green);
-                print($"✨ Features Enabled:", Color.Blue);
+                // **ENHANCED: Welcome message with comprehensive feature summary**
+                print("🚀 PoECrafter Advanced Version with Enhanced Persistence Loaded!", Color.Green);
+                print($"✨ Priority 2 Features:", Color.Blue);
                 print($"   🎯 OR Logic: {(chkUseORLogic.Checked ? "ON" : "OFF")}", Color.Blue);
                 print($"   💡 Smart Augmentation: {(chkSmartAugmentation.Checked ? "ON" : "OFF")}", Color.Blue);
                 print($"   🛑 Emergency Stop: {txtEmergencyHotkey.Text}", Color.Blue);
                 print($"   ⚙️ Crafting Mode: {cmbCraftingMode.Text}", Color.Blue);
-                print("🎮 Ready for advanced crafting operations!", Color.Green);
+                print($"   💾 Auto-Save Modifiers: {(Properties.Settings.Default.AutoSaveModifierChanges ? "ON" : "OFF")}", Color.Blue);
+                print($"   📝 Rule Sets Available: {SettingsManager.LoadModifierRuleSets().Count}", Color.Blue);
+                print($"   🎮 Ready for advanced crafting with comprehensive persistence!", Color.Green);
+                
+                // **NEW: Show last session info**
+                if (lastSession.TotalCurrencyUsed > 0)
+                {
+                    print($"📊 Last Session: {lastSession.SuccessfulCrafts} successes, {lastSession.TotalCurrencyUsed} currency used", Color.Cyan);
+                }
             }
             catch (Exception ex)
             {

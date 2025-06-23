@@ -275,7 +275,7 @@ namespace WindowsFormsApplication3
 
     public class Affixes
     {
-        public new List<String> AffixArray = new List<String>();
+        public List<String> AffixArray = new List<String>();
     }
 
     internal class Requirements

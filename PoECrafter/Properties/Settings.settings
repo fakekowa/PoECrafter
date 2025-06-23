@@ -68,5 +68,125 @@
     <Setting Name="MaxChaosToUse" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
     </Setting>
+    
+    <!-- **NEW: Enhanced Settings for Priority 2** -->
+    
+    <!-- UI State & Layout Preferences -->
+    <Setting Name="LogWindowVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LogWindowLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+    <Setting Name="LogWindowSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">400, 600</Value>
+    </Setting>
+    <Setting Name="SplitterDistance" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="MainTabSelectedIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    
+    <!-- Modifier Rules & Tier Selections (Enhanced) -->
+    <Setting Name="SelectedModifiersByItemType" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+    <Setting Name="ModifierRuleSets" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+    <Setting Name="CurrentItemType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">TwoHandedAxes</Value>
+    </Setting>
+    <Setting Name="LastUsedRuleSet" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+    
+    <!-- Advanced Logic Preferences -->
+    <Setting Name="DefaultLogicOperator" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AND</Value>
+    </Setting>
+    <Setting Name="AutoSaveModifierChanges" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowAdvancedModifierOptions" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    
+    <!-- Currency & Crafting Preferences -->
+    <Setting Name="DefaultCraftingStrategy" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SmartAugmentation</Value>
+    </Setting>
+    <Setting Name="MaxAlterationToUse" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="MaxAugmentationToUse" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="AutoStopOnSuccess" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PlaySoundOnSuccess" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    
+    <!-- Logging & Analysis Preferences -->
+    <Setting Name="EnableDetailedLogging" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowEmojiInLogs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShowRealTimeAnalysis" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LoggingVerbosity" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="AutoClearLogs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="MaxLogEntries" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1000</Value>
+    </Setting>
+    
+    <!-- Session Management -->
+    <Setting Name="RememberWindowPositions" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoRestoreSession" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LastCraftingSession" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+    <Setting Name="SessionStatistics" Type="System.String" Scope="User">
+      <Value Profile="(Default)"></Value>
+    </Setting>
+    
+    <!-- Emergency & Safety Features -->
+    <Setting Name="EnableEmergencyStop" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="EmergencyStopSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SafetyDelayMS" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="MaxCraftingIterations" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    
+    <!-- Performance & UI -->
+    <Setting Name="AnimationsEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoResizeColumns" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="HighlightActiveModifiers" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
