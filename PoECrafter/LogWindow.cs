@@ -31,8 +31,8 @@ namespace WindowsFormsApplication3
             this.LogTextBox.ScrollBars = RichTextBoxScrollBars.ForcedVertical;
             this.LogTextBox.TabIndex = 0;
             this.LogTextBox.Text = "";
-            this.LogTextBox.BackColor = Color.Black;
-            this.LogTextBox.ForeColor = Color.LightGreen;
+            this.LogTextBox.BackColor = Color.White;
+            this.LogTextBox.ForeColor = Color.Black;
             
             // 
             // LogWindow

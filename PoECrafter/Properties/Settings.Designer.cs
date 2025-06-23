@@ -277,7 +277,7 @@ namespace WindowsFormsApplication3.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
         public int MaxChaosToUse {
             get {
                 return ((int)(this["MaxChaosToUse"]));

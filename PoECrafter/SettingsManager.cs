@@ -419,7 +419,7 @@ namespace WindowsFormsApplication3
         public bool UseORLogic { get; set; } = false;
         public bool SmartAugmentation { get; set; } = false;
         public string DefaultStrategy { get; set; } = "SmartAugmentation";
-        public int MaxChaosToUse { get; set; } = 50;
+        public int MaxChaosToUse { get; set; } = 500;
         public int MaxAlterationToUse { get; set; } = 100;
         public int MaxAugmentationToUse { get; set; } = 50;
         public bool AutoStopOnSuccess { get; set; } = true;

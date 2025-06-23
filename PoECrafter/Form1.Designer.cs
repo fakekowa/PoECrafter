@@ -328,12 +328,25 @@
             this.chkSmartAugmentation.UseVisualStyleBackColor = true;
             this.chkSmartAugmentation.CheckedChanged += new System.EventHandler(this.chkSmartAugmentation_CheckedChanged);
 
-            // Current Item Analysis Display - below smart augmentation
+            // Speed Crafting Toggle - below smart augmentation  
+            this.chkSpeedCrafting = new System.Windows.Forms.CheckBox();
+            this.chkSpeedCrafting.AutoSize = true;
+            this.chkSpeedCrafting.Font = new System.Drawing.Font("Verdana", 9F);
+            this.chkSpeedCrafting.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            this.chkSpeedCrafting.Location = new System.Drawing.Point(435, 95);
+            this.chkSpeedCrafting.Name = "chkSpeedCrafting";
+            this.chkSpeedCrafting.Size = new System.Drawing.Size(140, 18);
+            this.chkSpeedCrafting.TabIndex = 14;
+            this.chkSpeedCrafting.Text = "Speed Crafting";
+            this.chkSpeedCrafting.UseVisualStyleBackColor = true;
+            this.chkSpeedCrafting.CheckedChanged += new System.EventHandler(this.chkSpeedCrafting_CheckedChanged);
+
+            // Current Item Analysis Display - below speed crafting
             this.lblCurrentAnalysis = new System.Windows.Forms.Label();
             this.lblCurrentAnalysis.AutoSize = true;
             this.lblCurrentAnalysis.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold);
             this.lblCurrentAnalysis.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            this.lblCurrentAnalysis.Location = new System.Drawing.Point(435, 95);
+            this.lblCurrentAnalysis.Location = new System.Drawing.Point(435, 120);
             this.lblCurrentAnalysis.Name = "lblCurrentAnalysis";
             this.lblCurrentAnalysis.Size = new System.Drawing.Size(120, 14);
             this.lblCurrentAnalysis.TabIndex = 12;
@@ -342,7 +355,7 @@
             this.txtCurrentAnalysis = new System.Windows.Forms.TextBox();
             this.txtCurrentAnalysis.Font = new System.Drawing.Font("Consolas", 8F);
             this.txtCurrentAnalysis.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            this.txtCurrentAnalysis.Location = new System.Drawing.Point(435, 115);
+            this.txtCurrentAnalysis.Location = new System.Drawing.Point(435, 140);
             this.txtCurrentAnalysis.Multiline = true;
             this.txtCurrentAnalysis.Name = "txtCurrentAnalysis";
             this.txtCurrentAnalysis.ReadOnly = true;
@@ -354,6 +367,7 @@
             // Add new controls to GroupBox2
             this.groupBox2.Controls.Add(this.chkUseORLogic);
             this.groupBox2.Controls.Add(this.chkSmartAugmentation);
+            this.groupBox2.Controls.Add(this.chkSpeedCrafting);
             this.groupBox2.Controls.Add(this.lblCurrentAnalysis);
             this.groupBox2.Controls.Add(this.txtCurrentAnalysis);
             // 
@@ -692,6 +706,7 @@
         private System.Windows.Forms.TextBox txtCurrentAnalysis;
         private System.Windows.Forms.Button btnShowLogs;
         private System.Windows.Forms.Label lblCurrencyInstructions;
+        private System.Windows.Forms.CheckBox chkSpeedCrafting;
     }
 }
 

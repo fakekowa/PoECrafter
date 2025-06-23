@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace WindowsFormsApplication3
 {
@@ -143,25 +145,63 @@ namespace WindowsFormsApplication3
 
             if (analysis.IsMagic && config.EnableSmartAugmentation)
             {
-                // Smart augmentation logic
-                if (analysis.PrefixCount + analysis.SuffixCount == 1)
+                // **NEW: Use magic item name analysis (much faster and more reliable)**
+                var (hasPrefix, hasSuffix) = MagicItemNameAnalyzer.AnalyzeMagicItemName(analysis.ItemText);
+                int totalAffixes = (hasPrefix ? 1 : 0) + (hasSuffix ? 1 : 0);
+                
+                // **FALLBACK: If name analysis fails (empty ItemText or parsing issues), use old method**
+                if (totalAffixes == 0 && !string.IsNullOrEmpty(analysis.ItemText) && analysis.DetectedAffixes.Count > 0)
                 {
-                    // Item has 1 affix - check if we want the opposite type
-                    var currentAffixTypes = analysis.DetectedAffixes.Select(a => a.Type).ToHashSet();
+                    // Use the old affix-based counting as fallback
+                    totalAffixes = analysis.PrefixCount + analysis.SuffixCount;
+                    hasPrefix = analysis.PrefixCount > 0;
+                    hasSuffix = analysis.SuffixCount > 0;
+                }
+                else if (totalAffixes == 0 && string.IsNullOrEmpty(analysis.ItemText) && analysis.DetectedAffixes.Count > 0)
+                {
+                    // For tests with no ItemText but DetectedAffixes, use the old method entirely
+                    totalAffixes = analysis.PrefixCount + analysis.SuffixCount;
+                    hasPrefix = analysis.PrefixCount > 0;
+                    hasSuffix = analysis.SuffixCount > 0;
+                }
+                
+                // **CRITICAL FIX: Handle full magic items (2 affixes)**
+                if (totalAffixes >= 2)
+                {
+                    // Magic item is full (2 affixes), must use alteration to reroll
+                    return CurrencyType.Alteration;
+                }
+                
+                // Smart augmentation logic for 1-affix items
+                if (totalAffixes == 1)
+                {
+                    // Determine what types of affixes the user wants
                     var targetAffixTypes = GetTargetAffixTypes(config);
                     
-                    // If we want both prefix and suffix types, and current item only has one type
-                    if (targetAffixTypes.Contains(AffixType.Prefix) && targetAffixTypes.Contains(AffixType.Suffix))
+                    // Current affix types based on name analysis or fallback
+                    var currentAffixTypes = new HashSet<AffixType>();
+                    if (hasPrefix) currentAffixTypes.Add(AffixType.Prefix);
+                    if (hasSuffix) currentAffixTypes.Add(AffixType.Suffix);
+                    
+                    // **ENHANCED LOGIC: Use augmentation if we want affix types that the item doesn't have**
+                    // This covers both cases:
+                    // 1. We want completely different types (old logic)
+                    // 2. We want additional types beyond what the item has (new logic)
+                    var missingTypes = new HashSet<AffixType>(targetAffixTypes);
+                    missingTypes.ExceptWith(currentAffixTypes);
+                    
+                    if (missingTypes.Count > 0)
                     {
-                        if (currentAffixTypes.Count == 1)
-                        {
-                            return CurrencyType.Augmentation; // Add the missing type
-                        }
+                        return CurrencyType.Augmentation; // Add the missing affix type(s)
                     }
                 }
+                
+                // Default: Use alteration (no affixes, or want same type as current)
+                return CurrencyType.Alteration;
             }
 
-            return CurrencyType.Alteration; // Default: Alt spam
+            // Default fallback
+            return CurrencyType.Alteration;
         }
 
         private static HashSet<AffixType> GetTargetAffixTypes(CraftingConfiguration config)
@@ -239,6 +279,14 @@ namespace WindowsFormsApplication3
             if (modifierText.Contains("increased Physical Damage") && modifierText.Contains("Accuracy"))
                 return "Hybrid Physical/Accuracy";
             
+            // **ENHANCED: Elemental Damage patterns**
+            if (modifierText.Contains("Adds") && modifierText.Contains("Lightning Damage"))
+                return "Added Lightning Damage";
+            if (modifierText.Contains("Adds") && modifierText.Contains("Fire Damage"))
+                return "Added Fire Damage";
+            if (modifierText.Contains("Adds") && modifierText.Contains("Cold Damage"))
+                return "Added Cold Damage";
+            
             // Attack modifiers
             if (modifierText.Contains("increased Attack Speed"))
                 return "Attack Speed %";
@@ -252,7 +300,8 @@ namespace WindowsFormsApplication3
                 return "Life";
             if (modifierText.Contains("to Armour"))
                 return "Armour";
-            if (modifierText.Contains("to Accuracy Rating"))
+            // **ENHANCED: Better accuracy detection**
+            if (modifierText.Contains("to Accuracy Rating") || modifierText.Contains("Accuracy Rating"))
                 return "Accuracy Rating";
             
             // Resistances
@@ -372,6 +421,393 @@ namespace WindowsFormsApplication3
                 }
             }
             return false;
+        }
+    }
+
+    // **NEW: Magic Item Name Analysis (More Reliable)**
+    public static class MagicItemNameAnalyzer
+    {
+        // Magic item naming patterns:
+        // Prefix only: "{Prefix} {BaseType}"
+        // Suffix only: "{BaseType} of {Suffix}"  
+        // Both: "{Prefix} {BaseType} of {Suffix}"
+        
+        public static (bool hasPrefix, bool hasSuffix) AnalyzeMagicItemName(string itemText)
+        {
+            if (string.IsNullOrEmpty(itemText))
+                return (false, false);
+
+            // Extract the item name line (after "Rarity: Magic")
+            var lines = itemText.Split('\n');
+            string itemName = "";
+            
+            bool foundRarityMagic = false;
+            foreach (var line in lines)
+            {
+                if (line.Trim() == "Rarity: Magic")
+                {
+                    foundRarityMagic = true;
+                    continue;
+                }
+                
+                if (foundRarityMagic && !string.IsNullOrWhiteSpace(line.Trim()) && 
+                    !line.Contains("--------"))
+                {
+                    itemName = line.Trim();
+                    break;
+                }
+            }
+            
+            if (string.IsNullOrEmpty(itemName))
+                return (false, false);
+            
+            return AnalyzeItemNamePattern(itemName);
+        }
+        
+        private static (bool hasPrefix, bool hasSuffix) AnalyzeItemNamePattern(string itemName)
+        {
+            // Check if item has " of " pattern (indicates suffix)
+            bool hasSuffix = itemName.Contains(" of ");
+            
+            // Get list of known base types to check for prefix
+            var knownBaseTypes = GetKnownBaseTypes();
+            
+            if (hasSuffix)
+            {
+                // Pattern: "{Prefix} {BaseType} of {Suffix}" or "{BaseType} of {Suffix}"
+                var beforeOf = itemName.Split(" of ")[0];
+                
+                // Check if there's a prefix before the base type
+                bool hasPrefix = false;
+                foreach (var baseType in knownBaseTypes)
+                {
+                    if (beforeOf.EndsWith(baseType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // If there's text before the base type, it's a prefix
+                        var potentialPrefix = beforeOf.Substring(0, beforeOf.Length - baseType.Length).Trim();
+                        hasPrefix = !string.IsNullOrEmpty(potentialPrefix);
+                        break;
+                    }
+                }
+                
+                return (hasPrefix, true);
+            }
+            else
+            {
+                // Pattern: "{Prefix} {BaseType}" or just "{BaseType}"
+                // Check if any known base type is at the end
+                foreach (var baseType in knownBaseTypes)
+                {
+                    if (itemName.EndsWith(baseType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // If there's text before the base type, it's a prefix
+                        var potentialPrefix = itemName.Substring(0, itemName.Length - baseType.Length).Trim();
+                        bool hasPrefix = !string.IsNullOrEmpty(potentialPrefix);
+                        return (hasPrefix, false);
+                    }
+                }
+                
+                // If we can't identify the base type, assume it has a prefix if it's not just the base
+                return (true, false);
+            }
+        }
+        
+        public static HashSet<string> GetKnownBaseTypes()
+        {
+            return new HashSet<string>
+            {
+                "Vaal Axe", "Siege Axe", "Poleaxe", "Labrys", "Karui Chopper",
+                "Maraketh Two-Handed Sword", "Exquisite Blade", "Lion Sword",
+                "Infernal Sword", "Ezomyte Blade", "Oro's Sacrifice",
+                // Add more base types as needed...
+                "Two-Handed Sword", "Two-Handed Axe", "Two-Handed Mace",
+                "Staff", "Bow", "Claw", "Dagger", "One-Handed Sword", 
+                "One-Handed Axe", "One-Handed Mace", "Sceptre", "Wand"
+            };
+        }
+    }
+
+    // **NEW: Magic Item Prefix/Suffix Name Database for Fast Crafting Success Detection**
+    public static class MagicItemNameDatabase
+    {
+        // Maps magic item prefix names to their corresponding modifiers
+        public static Dictionary<string, List<string>> PrefixNames = new Dictionary<string, List<string>>
+        {
+            // Physical Damage % Prefixes (T8-T1)
+            {"Heavy", new List<string> {"Physical Damage %"}}, // T8
+            {"Serrated", new List<string> {"Physical Damage %"}}, // T7
+            {"Wicked", new List<string> {"Physical Damage %"}}, // T6
+            {"Vicious", new List<string> {"Physical Damage %"}}, // T5
+            {"Bloodthirsty", new List<string> {"Physical Damage %"}}, // T4
+            {"Cruel", new List<string> {"Physical Damage %"}}, // T3
+            {"Tyrannical", new List<string> {"Physical Damage %"}}, // T2
+            {"Merciless", new List<string> {"Physical Damage %"}}, // T1
+            
+            // Flat Physical Damage Prefixes (T9-T1)
+            {"Burnished", new List<string> {"Flat Physical Damage"}}, // T8
+            {"Polished", new List<string> {"Flat Physical Damage"}}, // T7
+            {"Honed", new List<string> {"Flat Physical Damage"}}, // T6
+            {"Gleaming", new List<string> {"Flat Physical Damage"}}, // T5
+            {"Annealed", new List<string> {"Flat Physical Damage"}}, // T4
+            {"Razor-sharp", new List<string> {"Flat Physical Damage"}}, // T3 - MISSING!
+            {"Tempered", new List<string> {"Flat Physical Damage"}}, // T2 - MISSING!
+            {"Flaring", new List<string> {"Flat Physical Damage"}}, // T1
+            
+            // Elemental Damage Prefixes
+            {"Burning", new List<string> {"Added Fire Damage"}},
+            {"Scorching", new List<string> {"Added Fire Damage"}},
+            {"Incinerating", new List<string> {"Added Fire Damage"}},
+            {"Freezing", new List<string> {"Added Cold Damage"}},
+            {"Frigid", new List<string> {"Added Cold Damage"}},
+            {"Entombing", new List<string> {"Added Cold Damage"}},
+            {"Sparking", new List<string> {"Added Lightning Damage"}},
+            {"Glinting", new List<string> {"Added Lightning Damage"}}, // User's example
+            {"Crackling", new List<string> {"Added Lightning Damage"}},
+            {"Discharging", new List<string> {"Added Lightning Damage"}},
+            
+            // Hybrid Physical/Accuracy Prefixes (T8-T1)
+            {"Squire's", new List<string> {"Hybrid Physical/Accuracy"}}, // T8
+            {"Journeyman's", new List<string> {"Hybrid Physical/Accuracy"}}, // T7
+            {"Reaver's", new List<string> {"Hybrid Physical/Accuracy"}}, // T6
+            {"Mercenary's", new List<string> {"Hybrid Physical/Accuracy"}}, // T5
+            {"Champion's", new List<string> {"Hybrid Physical/Accuracy"}}, // T4
+            {"Conqueror's", new List<string> {"Hybrid Physical/Accuracy"}}, // T3
+            {"Emperor's", new List<string> {"Hybrid Physical/Accuracy"}}, // T2 - MISSING!
+            {"Dictator's", new List<string> {"Hybrid Physical/Accuracy"}}, // T1
+            
+            // Life/Defense Prefixes
+            {"Healthy", new List<string> {"Life"}},
+            {"Vigorous", new List<string> {"Life"}},
+            {"Stalwart", new List<string> {"Armour"}},
+            {"Fortified", new List<string> {"Armour"}},
+            
+            // Accuracy Prefixes
+            {"Marksman's", new List<string> {"Accuracy Rating"}},
+            {"Ranger's", new List<string> {"Accuracy Rating"}},
+            {"Sniper's", new List<string> {"Accuracy Rating"}},
+        };
+        
+        // Maps magic item suffix names to their corresponding modifiers
+        public static Dictionary<string, List<string>> SuffixNames = new Dictionary<string, List<string>>
+        {
+            // Attack Speed Suffixes (T6-T1)
+            {"of Celebration", new List<string> {"Attack Speed %"}}, // T1
+            {"of Skill", new List<string> {"Attack Speed %"}}, // T2, User's example
+            {"of Alacrity", new List<string> {"Attack Speed %"}}, // T3
+            {"of Infamy", new List<string> {"Attack Speed %"}}, // T4
+            {"of Fame", new List<string> {"Attack Speed %"}}, // T5
+            {"of Renown", new List<string> {"Attack Speed %"}}, // T6
+            
+            // Critical Strike Chance Suffixes
+            {"of Precision", new List<string> {"Critical Strike Chance %"}},
+            {"of Technique", new List<string> {"Critical Strike Chance %"}},
+            {"of Lethality", new List<string> {"Critical Strike Chance %"}},
+            {"of Deadliness", new List<string> {"Critical Strike Chance %"}},
+            
+            // Critical Strike Multiplier Suffixes
+            {"of Destruction", new List<string> {"Critical Strike Multiplier %"}},
+            {"of Ruin", new List<string> {"Critical Strike Multiplier %"}},
+            {"of Devastation", new List<string> {"Critical Strike Multiplier %"}},
+            {"of Annihilation", new List<string> {"Critical Strike Multiplier %"}},
+            
+            // Accuracy Rating Suffixes
+            {"of Accuracy", new List<string> {"Accuracy Rating"}},
+            {"of the Marksman", new List<string> {"Accuracy Rating"}},
+            {"of the Sniper", new List<string> {"Accuracy Rating"}},
+            {"of the Archer", new List<string> {"Accuracy Rating"}},
+            
+            // Resistance Suffixes
+            {"of the Salamander", new List<string> {"Fire Resistance"}},
+            {"of the Volcano", new List<string> {"Fire Resistance"}},
+            {"of the Yeti", new List<string> {"Cold Resistance"}},
+            {"of the Glacier", new List<string> {"Cold Resistance"}},
+            {"of the Thunderbird", new List<string> {"Lightning Resistance"}},
+            {"of the Storm", new List<string> {"Lightning Resistance"}},
+            
+            // Life/Defense Suffixes
+            {"of Life", new List<string> {"Life"}},
+            {"of Vitality", new List<string> {"Life"}},
+            {"of the Ox", new List<string> {"Life"}},
+            {"of the Tortoise", new List<string> {"Armour"}},
+            {"of the Rhino", new List<string> {"Armour"}},
+            
+            // Mana Suffixes
+            {"of Mana", new List<string> {"Mana"}},
+            {"of the Mind", new List<string> {"Mana"}},
+            {"of Clarity", new List<string> {"Mana"}},
+        };
+        
+        public static bool CheckMagicItemSuccess(string itemText, CraftingConfiguration config)
+        {
+            var (hasPrefix, hasSuffix) = MagicItemNameAnalyzer.AnalyzeMagicItemName(itemText);
+            
+            if (!hasPrefix && !hasSuffix)
+                return false; // No affixes
+                
+            // Extract the actual prefix and suffix names
+            var (prefixName, suffixName) = ExtractPrefixSuffixNames(itemText);
+            
+            // Get modifiers from names
+            var itemModifiers = new List<string>();
+            var foundNames = new List<string>();
+            
+            if (!string.IsNullOrEmpty(prefixName) && PrefixNames.ContainsKey(prefixName))
+            {
+                itemModifiers.AddRange(PrefixNames[prefixName]);
+                foundNames.Add($"prefix '{prefixName}'");
+            }
+            
+            if (!string.IsNullOrEmpty(suffixName) && SuffixNames.ContainsKey(suffixName))
+            {
+                itemModifiers.AddRange(SuffixNames[suffixName]);
+                foundNames.Add($"suffix '{suffixName}'");
+            }
+            
+            // Check if any of the item's modifiers match what we want
+            bool result = CheckModifierMatch(itemModifiers, config, foundNames, prefixName, suffixName);
+            return result;
+        }
+        
+        private static (string prefixName, string suffixName) ExtractPrefixSuffixNames(string itemText)
+        {
+            // Extract the item name line
+            var lines = itemText.Split('\n');
+            string itemName = "";
+            
+            bool foundRarityMagic = false;
+            foreach (var line in lines)
+            {
+                if (line.Trim() == "Rarity: Magic")
+                {
+                    foundRarityMagic = true;
+                    continue;
+                }
+                
+                if (foundRarityMagic && !string.IsNullOrWhiteSpace(line.Trim()) && 
+                    !line.Contains("--------"))
+                {
+                    itemName = line.Trim();
+                    break;
+                }
+            }
+            
+            if (string.IsNullOrEmpty(itemName))
+                return ("", "");
+                
+            // Parse the name pattern
+            string prefixName = "";
+            string suffixName = "";
+            
+            if (itemName.Contains(" of "))
+            {
+                var parts = itemName.Split(" of ");
+                suffixName = "of " + parts[1];
+                
+                var beforeOf = parts[0];
+                // Check for prefix before base type
+                foreach (var baseType in MagicItemNameAnalyzer.GetKnownBaseTypes())
+                {
+                    if (beforeOf.EndsWith(baseType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var potentialPrefix = beforeOf.Substring(0, beforeOf.Length - baseType.Length).Trim();
+                        if (!string.IsNullOrEmpty(potentialPrefix))
+                        {
+                            prefixName = potentialPrefix;
+                        }
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // Only prefix, no suffix
+                foreach (var baseType in MagicItemNameAnalyzer.GetKnownBaseTypes())
+                {
+                    if (itemName.EndsWith(baseType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var potentialPrefix = itemName.Substring(0, itemName.Length - baseType.Length).Trim();
+                        if (!string.IsNullOrEmpty(potentialPrefix))
+                        {
+                            prefixName = potentialPrefix;
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            return (prefixName, suffixName);
+        }
+        
+        private static bool CheckModifierMatch(List<string> itemModifiers, CraftingConfiguration config, List<string> foundNames, string prefixName, string suffixName)
+        {
+            if (itemModifiers.Count == 0)
+            {
+                LogHelper.Print("❌ Name-based detection: No recognized modifiers from item names", System.Drawing.Color.Orange);
+                return false;
+            }
+                
+            // Check against target modifiers using the same OR/AND logic
+            foreach (var group in config.ModifierGroups.Where(g => g.IsEnabled))
+            {
+                foreach (var targetModifier in group.SelectedModifiers)
+                {
+                    foreach (var itemModifier in itemModifiers)
+                    {
+                        if (itemModifier.Contains(targetModifier) || targetModifier.Contains(itemModifier))
+                        {
+                            // Enhanced logging for successful match
+                            var nameInfo = foundNames.Count > 0 ? string.Join(" and ", foundNames) : "item name";
+                            LogHelper.Print($"🎯 MATCH SUCCESS: Found {nameInfo} - this matches target modifier '{targetModifier}'!", System.Drawing.Color.Lime);
+                            
+                            if (!string.IsNullOrEmpty(prefixName))
+                                LogHelper.Print($"   ✅ Prefix: \"{prefixName}\" → {itemModifier}", System.Drawing.Color.Green);
+                            if (!string.IsNullOrEmpty(suffixName))
+                                LogHelper.Print($"   ✅ Suffix: \"{suffixName}\" → {itemModifier}", System.Drawing.Color.Green);
+                                
+                            return true; // Found a match
+                        }
+                    }
+                }
+            }
+            
+            // Log when no match found
+            var availableModifiers = string.Join(", ", itemModifiers);
+            var targetModifiers = string.Join(", ", config.ModifierGroups.Where(g => g.IsEnabled).SelectMany(g => g.SelectedModifiers));
+            LogHelper.Print($"❌ Name-based detection failed: Item has [{availableModifiers}] but need [{targetModifiers}]", System.Drawing.Color.Orange);
+            
+            return false;
+        }
+    }
+
+    public static class LogHelper
+    {
+        private static ProgressBar mainForm = null;
+        
+        public static void Initialize(ProgressBar form)
+        {
+            mainForm = form;
+        }
+        
+        public static void Print(string message, Color color)
+        {
+            // Try to access the main form's print method
+            if (mainForm != null)
+            {
+                try
+                {
+                    mainForm.print(message, color);
+                }
+                catch
+                {
+                    // Fallback to console if form access fails
+                    System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {message}");
+                }
+            }
+            else
+            {
+                // No form available, fallback to console
+                System.Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {message}");
+            }
         }
     }
 }

@@ -152,12 +152,57 @@ namespace WindowsFormsApplication3
         public void GetAffixes()
         {
             affixes.Clear();
-            var unfilteredAffixes = Item.Split(new string[] { "--------" }, StringSplitOptions.None).Last().Split(new string[] { "\r\n" }, StringSplitOptions.None).ToList();
-
-            foreach (var affix in unfilteredAffixes)
+            
+            // **OPTIMIZED: Handle null Item with minimal overhead**
+            if (string.IsNullOrEmpty(Item))
             {
-                string trimmedAffix = Regex.Replace(affix, "{.*?}", string.Empty);
-                affixes.Add(trimmedAffix);
+                // Fast clipboard read with minimal delay
+                try
+                {
+                    if (Clipboard.ContainsText())
+                    {
+                        Item = Clipboard.GetText();
+                        // Only log during startup, not every iteration for speed
+                        if (affixes.Count == 0)
+                            print("📋 Retrieved item data from clipboard", Color.Green);
+                    }
+                    else
+                    {
+                        print("❌ No clipboard data available", Color.Red);
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    print($"❌ Clipboard error: {ex.Message}", Color.Red);
+                    return;
+                }
+            }
+            
+            // **OPTIMIZED: Quick null check**
+            if (string.IsNullOrEmpty(Item))
+            {
+                print("❌ No item data available", Color.Red);
+                return;
+            }
+            
+            try
+            {
+                var unfilteredAffixes = Item.Split(new string[] { "--------" }, StringSplitOptions.None).Last().Split(new string[] { "\r\n" }, StringSplitOptions.None).ToList();
+
+                foreach (var affix in unfilteredAffixes)
+                {
+                    string trimmedAffix = Regex.Replace(affix, "{.*?}", string.Empty);
+                    affixes.Add(trimmedAffix);
+                }
+                
+                // **SPEED: Only log affix count on startup or errors, not every iteration**
+                if (affixes.Count == 0)
+                    print("⚠️ No affixes found in item", Color.Orange);
+            }
+            catch (Exception ex)
+            {
+                print($"❌ Parse error: {ex.Message}", Color.Red);
             }
         }
 
@@ -191,17 +236,24 @@ namespace WindowsFormsApplication3
                 print($"Debug - Item location: ({CraftingLocation.CraftMat[0]}, {CraftingLocation.CraftMat[1]})", Color.Gray);
 
                 FocusPoE();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 50));
                 VirtualKeyboard.KeyDown(Keys.LShiftKey);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
+                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 250));
                 VirtualKeyboard.KeyUp(Keys.LShiftKey);
                 
                 SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 250);
-                SendKeys.Send("^(C)");
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 250));
+                
+                // **CONSISTENT: Use VirtualKeyboard for initial Ctrl+C**
+                VirtualKeyboard.KeyDown(Keys.LControlKey);
+                await System.Threading.Tasks.Task.Delay(50);
+                VirtualKeyboard.KeyDown(Keys.C);
+                await System.Threading.Tasks.Task.Delay(50);
+                VirtualKeyboard.KeyUp(Keys.C);
+                VirtualKeyboard.KeyUp(Keys.LControlKey);
+                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 250)); // **STARTUP: Longer delay for initial item read
                 GetAffixes();
-                await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 50));
 
                 // Reset emergency stop for new crafting session
                 isEmergencyStopActive = false;
@@ -216,6 +268,12 @@ namespace WindowsFormsApplication3
                         // Check for emergency stop
                         if (isEmergencyStopActive)
                         {
+                            // **NEW: Release SHIFT if speed crafting was being used**
+                            if (chkSpeedCrafting.Checked)
+                            {
+                                VirtualKeyboard.KeyUp(Keys.LShiftKey);
+                                print("🚀 Speed Crafting: Released SHIFT key due to emergency stop", Color.Orange);
+                            }
                             print("🛑 Crafting stopped by emergency hotkey!", Color.Red);
                             break;
                         }
@@ -274,17 +332,91 @@ namespace WindowsFormsApplication3
                             }
                         }
 
-                        // Do Reroll with selected currency
-                        SetCursorPos(currencyLocation[0], currencyLocation[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
-                        RightClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
-                        SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
-                        LeftClick();
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 150);
-                        SendKeys.Send("^(C)");
-                        await System.Threading.Tasks.Task.Delay(trackBar1.Value + 50);
+                        // **NEW: Speed Crafting Implementation**
+                        if (chkSpeedCrafting.Checked)
+                        {
+                            // **ENHANCED: Handle currency changes during speed crafting**
+                            bool needsCurrencyChange = false;
+                            
+                            if (Roll > 0) // Not first iteration
+                            {
+                                // Check if recommended currency changed from last iteration
+                                var lastCurrencyName = GetLastUsedCurrency(); // We'll need to track this
+                                if (currencyName != lastCurrencyName)
+                                {
+                                    needsCurrencyChange = true;
+                                    print($"🔄 Speed Crafting: Currency change needed ({lastCurrencyName} → {currencyName})", Color.Orange);
+                                }
+                            }
+                            
+                            // Speed Crafting Mode: Hold SHIFT and stay on item
+                            if (Roll == 0 || needsCurrencyChange) // First iteration OR currency change needed
+                            {
+                                // **NEW: Release SHIFT if we're changing currency**
+                                if (needsCurrencyChange)
+                                {
+                                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
+                                    await System.Threading.Tasks.Task.Delay(50);
+                                    print("🚀 Speed Crafting: Released SHIFT for currency change", Color.Orange);
+                                }
+                                
+                                // Right-click currency (new or first time)
+                                SetCursorPos(currencyLocation[0], currencyLocation[1]);
+                                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                                RightClick();
+                                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                                
+                                // Move to item and hold SHIFT
+                                SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                                await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                                VirtualKeyboard.KeyDown(Keys.LShiftKey);
+                                await System.Threading.Tasks.Task.Delay(50);
+                                
+                                if (Roll == 0)
+                                    print("🚀 Speed Crafting: Initial setup - Holding SHIFT and staying on item", Color.Green);
+                                else
+                                    print($"🚀 Speed Crafting: Currency changed to {currencyName} - Re-holding SHIFT", Color.Green);
+                            }
+                            
+                            // Apply currency (SHIFT is already held down)
+                            LeftClick();
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                            print($"🚀 Applied {currencyName} while holding SHIFT", Color.Cyan);
+                            
+                            // **FIX: Copy item while maintaining SHIFT using VirtualKeyboard**
+                            VirtualKeyboard.KeyDown(Keys.LControlKey);
+                            await System.Threading.Tasks.Task.Delay(50);
+                            VirtualKeyboard.KeyDown(Keys.C);
+                            await System.Threading.Tasks.Task.Delay(50);
+                            VirtualKeyboard.KeyUp(Keys.C);
+                            VirtualKeyboard.KeyUp(Keys.LControlKey);
+                            print("📋 Copied item while maintaining SHIFT", Color.Cyan);
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 75)); // **SPEED: Fast delay for speed crafting
+                            
+                            // **NEW: Track the currency used for next iteration**
+                            SetLastUsedCurrency(currencyName);
+                        }
+                        else
+                        {
+                            // Normal Crafting Mode: Go back and forth
+                            SetCursorPos(currencyLocation[0], currencyLocation[1]);
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                            RightClick();
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                            SetCursorPos(CraftingLocation.CraftMat[0], CraftingLocation.CraftMat[1]);
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                            LeftClick();
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 150));
+                            
+                            // **CONSISTENT: Use VirtualKeyboard for Ctrl+C**
+                            VirtualKeyboard.KeyDown(Keys.LControlKey);
+                            await System.Threading.Tasks.Task.Delay(50);
+                            VirtualKeyboard.KeyDown(Keys.C);
+                            await System.Threading.Tasks.Task.Delay(50);
+                            VirtualKeyboard.KeyUp(Keys.C);
+                            VirtualKeyboard.KeyUp(Keys.LControlKey);
+                            await System.Threading.Tasks.Task.Delay(GetRandomizedDelay(trackBar1.Value, 100)); // **SPEED: Fast delay for normal crafting
+                        }
 
                         GetAffixes();
 
@@ -332,14 +464,23 @@ namespace WindowsFormsApplication3
                     ruleMatch = false;
                 }
 
+                // **NEW: Release SHIFT key if speed crafting was used**
+                if (chkSpeedCrafting.Checked)
+                {
+                    VirtualKeyboard.KeyUp(Keys.LShiftKey);
+                    print("🚀 Speed Crafting: Released SHIFT key", Color.Green);
+                }
+
                 print("--------------------------------------", Color.Black);
                 print(Environment.NewLine, Color.Black);
-                print("Used: (" + Roll + "/" + ChaosToUse.Value + ")", Color.Black);
+                // **FIX: Use actual settings value instead of UI control value**
+                var actualLimit = craftingConfig?.MaxCurrencyUsage ?? Properties.Settings.Default.MaxChaosToUse;
+                print("Used: (" + Roll + "/" + actualLimit + ")", Color.Black);
                 print(Environment.NewLine, Color.Black);
                 print("--------------------------------------", Color.Black);
                 print(Environment.NewLine, Color.Black);
                 print(Environment.NewLine, Color.Black);
-                VirtualKeyboard.KeyUp(Keys.LShiftKey);
+                VirtualKeyboard.KeyUp(Keys.LShiftKey); // Safety release - in case any other code was holding it
                 progressBar1.Value = 100;
                 Roll = 0;
             }
@@ -842,6 +983,9 @@ namespace WindowsFormsApplication3
         private ItemAnalysis currentItemAnalysis;
         private SmartCurrencySelector currencySelector;
 
+        // **NEW: Speed Crafting Currency Tracking**
+        private string lastUsedCurrency = "";
+
         // **NEW: Separate Log Window**
         private LogWindow logWindow;
 
@@ -866,6 +1010,11 @@ namespace WindowsFormsApplication3
                 print($"Augmentation strategy: {(chkSmartAugmentation.Checked ? "Smart Augmentation" : "Alt-Spam Only")}", Color.Blue);
                 UpdateCraftingStrategy();
             }
+        }
+
+        private void chkSpeedCrafting_CheckedChanged(object sender, EventArgs e)
+        {
+            print($"🚀 Speed Crafting: {(chkSpeedCrafting.Checked ? "ENABLED - Will hold SHIFT to speed up currency application" : "DISABLED - Normal currency application")}", Color.Purple);
         }
 
         private void UpdateCraftingStrategy()
@@ -996,7 +1145,7 @@ namespace WindowsFormsApplication3
             txtCurrentAnalysis.Text = analysisText.ToString();
         }
 
-        // **ENHANCED: CheckSelectedModifiers with OR/AND Logic**
+        // **ENHANCED: CheckSelectedModifiers with OR/AND Logic + Fast Magic Item Detection**
         private bool CheckSelectedModifiersAdvanced()
         {
             if (clbModifiers.CheckedItems.Count == 0)
@@ -1016,6 +1165,24 @@ namespace WindowsFormsApplication3
 
             string fullItemText = string.Join("\n", affixes);
             
+            // **NEW: Fast Magic Item Success Detection**
+            // For magic items, try fast name-based detection first
+            if (currentItemAnalysis != null && currentItemAnalysis.IsMagic && craftingConfig != null)
+            {
+                bool nameBasedResult = MagicItemNameDatabase.CheckMagicItemSuccess(fullItemText, craftingConfig);
+                if (nameBasedResult)
+                {
+                    print("🚀 FAST DETECTION: Magic item name matches target modifiers!", Color.Lime);
+                    print("✅ Success detected from item name without parsing individual modifiers", Color.Green);
+                    return true;
+                }
+                else
+                {
+                    print("🔍 Fast detection: Item name doesn't match, falling back to detailed analysis", Color.Yellow);
+                }
+            }
+            
+            // **FALLBACK: Detailed Modifier Analysis (for rare items or when name detection fails)**
             // Group modifiers by type for OR logic
             var modifierGroups = new Dictionary<string, List<string>>();
             
@@ -1031,6 +1198,7 @@ namespace WindowsFormsApplication3
             if (chkUseORLogic.Checked)
             {
                 // OR Logic: ANY group satisfies the requirement
+                print("🔍 MODIFIER-BASED detection: Analyzing individual modifier values...", Color.Cyan);
                 foreach (var group in modifierGroups)
                 {
                     bool groupSatisfied = false;
@@ -1038,6 +1206,7 @@ namespace WindowsFormsApplication3
                     {
                         if (CheckModifierTierFromSelection(fullItemText, modifier))
                         {
+                            print($"🎯 MATCH SUCCESS: Found MODIFIER values that match '{modifier}' - Its a success!", Color.Lime);
                             print($"✅ OR Logic satisfied by: {modifier}", Color.Green);
                             groupSatisfied = true;
                             break; // One modifier in group is enough
@@ -1057,15 +1226,18 @@ namespace WindowsFormsApplication3
             else
             {
                 // AND Logic: ALL selected modifiers must be satisfied (original behavior)
+                print("🔍 MODIFIER-BASED detection: Analyzing individual modifier values...", Color.Cyan);
                 foreach (string selectedModifier in clbModifiers.CheckedItems)
                 {
                     if (CheckModifierTierFromSelection(fullItemText, selectedModifier))
                     {
+                        print($"🎯 MATCH SUCCESS: Found MODIFIER values that match '{selectedModifier}' - Its a success!", Color.Lime);
                         print($"✅ Found acceptable modifier: {selectedModifier}", Color.Green);
                         return true; // Found at least one acceptable modifier (keeping original logic)
                     }
                 }
                 
+                print("❌ Modifier-based detection failed: No acceptable modifiers found", Color.Red);
                 return false; // No acceptable modifiers found
             }
         }
@@ -1096,6 +1268,7 @@ namespace WindowsFormsApplication3
             craftingConfig.ModifierGroups = groups.Values.ToList();
             
             print($"Initialized crafting configuration with {craftingConfig.ModifierGroups.Count} modifier groups", Color.Purple);
+            print($"💰 Crafting Configuration - MaxCurrencyUsage: {craftingConfig.MaxCurrencyUsage}", Color.Purple);
         }
 
         // **ENHANCED: Override the original CheckSelectedModifiers to use new logic**
@@ -1482,9 +1655,23 @@ namespace WindowsFormsApplication3
 
         private bool CheckModifierTierFromSelection(string itemText, string selectedModifier)
         {
-            // Extract the modifier type and tier from the selection
+            // **CRITICAL FIX: Hybrid Detection Priority**
+            // When checking for Physical Damage %, first check if this is actually a Hybrid modifier
+            // This prevents incorrectly identifying Hybrid Physical/Accuracy as separate Physical Damage %
+            
             if (selectedModifier.Contains("Physical Damage %"))
             {
+                // **NEW: Check if item has both Physical Damage % AND Accuracy Rating**
+                bool hasPhysDamage = System.Text.RegularExpressions.Regex.IsMatch(itemText, @"\d+% increased Physical Damage");
+                bool hasAccuracy = System.Text.RegularExpressions.Regex.IsMatch(itemText, @"\+\d+ to Accuracy Rating");
+                
+                if (hasPhysDamage && hasAccuracy)
+                {
+                    print("🔍 Detected both Physical Damage % and Accuracy - this is a Hybrid Physical/Accuracy modifier!", Color.Cyan);
+                    print("⚠️ Skipping individual Physical Damage % check (use Hybrid Phys/Acc selection instead)", Color.Orange);
+                    return false; // Don't treat as individual Physical Damage %
+                }
+                
                 return CheckPhysicalDamagePercentFromSelection(itemText, selectedModifier);
             }
             else if (selectedModifier.Contains("Flat Physical Damage"))
@@ -1649,19 +1836,28 @@ namespace WindowsFormsApplication3
 
         private bool CheckHybridPhysicalAccuracyFromSelection(string itemText, string selectedModifier)
         {
-            var match = System.Text.RegularExpressions.Regex.Match(itemText, @"(\d+)% increased Physical Damage.*?(\d+) to Accuracy Rating");
-            if (!match.Success) return false;
+            // **ENHANCED: Separate pattern matching for hybrid detection**
+            // Physical Damage % and Accuracy Rating can be on separate lines
+            var physMatch = System.Text.RegularExpressions.Regex.Match(itemText, @"(\d+)(?:\(\d+-\d+\))?% increased Physical Damage");
+            var accMatch = System.Text.RegularExpressions.Regex.Match(itemText, @"\+(\d+) to Accuracy Rating");
             
-            int physPercent = int.Parse(match.Groups[1].Value);
-            int accuracy = int.Parse(match.Groups[2].Value);
+            if (!physMatch.Success || !accMatch.Success)
+            {
+                print("❌ Hybrid Phys/Acc: Missing Physical Damage % or Accuracy Rating", Color.Red);
+                return false;
+            }
+            
+            int physPercent = int.Parse(physMatch.Groups[1].Value);
+            int accuracy = int.Parse(accMatch.Groups[1].Value);
             int actualTier = GetHybridPhysicalAccuracyTier(physPercent, accuracy);
             int selectedTier = GetTierFromItem(selectedModifier);
             
-            print($"Found Hybrid Phys/Acc: {physPercent}% + {accuracy} Acc (T{actualTier})", Color.Blue);
+            print($"✅ Found Hybrid Phys/Acc: {physPercent}% + {accuracy} Acc (T{actualTier})", Color.Blue);
             
             // **FIXED: Check if actual tier meets or exceeds selected tier requirement**
             if (selectedTier != -1 && actualTier <= selectedTier) // Lower tier number = better tier
             {
+                print($"🎯 Hybrid Phys/Acc T{actualTier} meets T{selectedTier} requirement!", Color.Green);
                 return true;
             }
             
@@ -1755,6 +1951,17 @@ namespace WindowsFormsApplication3
                 chkSmartAugmentation.Checked = craftingConfig.SmartAugmentation;
                 ChaosToUse.Value = craftingConfig.MaxChaosToUse;
                 
+                // **FIX: Ensure minimum reasonable crafting limit**
+                if (ChaosToUse.Value < 100)
+                {
+                    print($"⚠️ Warning: Max attempts was too low ({ChaosToUse.Value}), setting to 500", Color.Orange);
+                    ChaosToUse.Value = 500;
+                    Properties.Settings.Default.MaxChaosToUse = 500;
+                    Properties.Settings.Default.Save();
+                }
+                
+                print($"💰 Max Crafting Attempts Set To: {ChaosToUse.Value}", Color.Green);
+                
                 // **NEW: Initialize separate log window**
                 logWindow = new LogWindow();
                 logWindow.Text = "PoECrafter - Crafting Logs";
@@ -1817,6 +2024,7 @@ namespace WindowsFormsApplication3
                 LoadSelectedModifiers(savedModifiers);
 
                 // **ENHANCED: Initialize advanced systems**
+                LogHelper.Initialize(this); // Initialize logging for MagicItemNameDatabase
                 InitializeCraftingConfiguration();
                 SetupEmergencyStopHook();
                 GenerateGetProcessors();
@@ -1857,6 +2065,50 @@ namespace WindowsFormsApplication3
                 print($"⚠️ Error loading settings: {ex.Message}", Color.Red);
                 print("Using default settings...", Color.Orange);
             }
+        }
+
+        // **NEW: Speed Crafting Currency Tracking Helpers**
+        private string GetLastUsedCurrency()
+        {
+            return lastUsedCurrency;
+        }
+
+        private void SetLastUsedCurrency(string currencyName)
+        {
+            lastUsedCurrency = currencyName;
+        }
+
+        // **NEW: Randomized Delay System for Human-Like Behavior**
+        private static Random random = new Random();
+        
+        /// <summary>
+        /// Generates a randomized delay to make crafting look more human-like
+        /// For values <= 15: randomize upwards (e.g., 10 becomes 10-25)
+        /// For values > 15: randomize +/- around the value (e.g., 25 becomes 15-35)
+        /// </summary>
+        /// <param name="baseDelay">The base delay from trackBar1.Value</param>
+        /// <param name="additionalMs">Additional fixed milliseconds to add</param>
+        /// <returns>Randomized delay in milliseconds</returns>
+        private int GetRandomizedDelay(int baseDelay, int additionalMs = 0)
+        {
+            int randomizedBase;
+            
+            if (baseDelay <= 15)
+            {
+                // For low values, randomize upwards only (10 -> 10-25)
+                int maxIncrease = Math.Max(15, baseDelay + 10); // At least 15ms increase
+                randomizedBase = random.Next(baseDelay, baseDelay + maxIncrease);
+            }
+            else
+            {
+                // For higher values, randomize +/- around the value (25 -> 15-35)
+                int variance = (int)(baseDelay * 0.4); // 40% variance
+                int minDelay = Math.Max(5, baseDelay - variance); // Never go below 5ms
+                int maxDelay = baseDelay + variance;
+                randomizedBase = random.Next(minDelay, maxDelay + 1);
+            }
+            
+            return randomizedBase + additionalMs;
         }
     }
 
